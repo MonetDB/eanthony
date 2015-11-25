@@ -58,14 +58,14 @@ do
 		RTBURL="https://cran.r-project.org/src/base/R-3/R-$RTAG.tar.gz"
 		curl -s $RTBURL | tar xz -C $RSRCDIR --strip-components=1
 		cd $RSRCDIR
-		./configure --prefix=$RINSTALLDIR --with-x=no --without-recommended-packages > $LOGDIR/r-configure.out 2> $LOGDIR/r-configure.err
-		make > $LOGDIR/r-make.out 2> $LOGDIR/r-make.err
+		./configure --prefix=$RINSTALLDIR --with-x=no --without-recommended-packages > $LOGDIR/r-configure.log 2>&1
+		make > $LOGDIR/r-make.log 2>&1
 		# make R install without latex
 		touch $RSRCDIR/doc/NEWS.pdf
 		touch $RSRCDIR/doc/RESOURCES
 		touch $RSRCDIR/doc/FAQ
 
-		make install >> $LOGDIR/r-make.out 2>> $LOGDIR/r-make.err
+		make install >> $LOGDIR/r-make.log 2>&1
 		cd ..
 	fi
 	if [ ! -f $RBIN ] ; then
@@ -88,9 +88,9 @@ do
 			--disable-jdbc --disable-merocontrol --disable-odbc --disable-microhttpd \
 			--without-perl --without-python2 --without-python3 --without-rubygem --without-unixodbc \
 			--without-samtools --without-sphinxclient --without-geos --without-samtools  \
-			> $LOGDIR/monetdb-configure.out 2> $LOGDIR/monetdb-configure.err
+			> $LOGDIR/monetdb-configure.log 2>&1
 
-		make -j clean install > $LOGDIR/monetdb-make.out 2> $LOGDIR/monetdb-make.err
+		make -j clean install > $LOGDIR/monetdb-make.log 2>&1
 		cd ..
 	fi
 	if [ ! -f $MBIN ] ; then
@@ -100,7 +100,7 @@ do
 
 	export R_LIBS=$RLIBDIR TMP=$RTMPDIR TEMP=$RTMPDIR PATH=$MINSTALLDIR/bin:$PATH
 	# install/update various packages
-	$RBIN -f $BASEDIR/packages.R > $LOGDIR/packages.out 2> $LOGDIR/packages.err
+	$RBIN -f $BASEDIR/packages.R > $LOGDIR/packages.log 2>&1
 	# record versions of installed packages
 	$RBIN --slave -e "write.table(installed.packages(lib.loc='$RLIBDIR')[, c('Package','Version')], '$LOGDIR/package-versions', sep='\t', quote=F, row.names=F, col.names=F)"
 
@@ -124,12 +124,12 @@ do
 		export RWD=$RWDDIR/$SCRIPT
 		rm -rf $RWD 
 		mkdir -p $RWD
-		$RBIN -f $BASEDIR/$SCRIPT-setup.R > $LOGDIR/$SCRIPT-setup.out 2> $LOGDIR/$SCRIPT-setup.err
+		$RBIN -f $BASEDIR/$SCRIPT-setup.R > $LOGDIR/$SCRIPT.log 2>&1
 		if [ $? != 0 ]; then
 			echo "$SCRIPT setup fail"
 		else
 			touch $LOGDIR/$SCRIPT-setup-success
-			$RBIN -f $BASEDIR/$SCRIPT-test.R > $LOGDIR/$SCRIPT-test.out 2> $LOGDIR/$SCRIPT-test.err
+			$RBIN -f $BASEDIR/$SCRIPT-test.R >> $LOGDIR/$SCRIPT.log 2>&1
 			if [ $? != 0 ]; then
 				echo "$SCRIPT test fail"
 			else
