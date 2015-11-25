@@ -1,4 +1,5 @@
 setwd(Sys.getenv("RWD"))
+path.to.7z <- "7za"
 single.year.datasets.to.download <- 2005:2014
 three.year.datasets.to.download <- 2007:2013
 five.year.datasets.to.download <- 2009:2013
