@@ -77,6 +77,13 @@ usort($runs, "rcmp");
 <title>Electric Anthony</title>
 
 <style>
+.status {
+	width: 20px;
+	height: 20px;
+}
+.status-started {
+	background-color: #e9e9e9;
+}
 .status-failed {
 	background-color: #FF6633;
 }
