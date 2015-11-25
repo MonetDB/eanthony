@@ -23,7 +23,7 @@ function fe($d, $f) {
 $runs = array();
 $tests = array();
 
-foreach(ld(dirname(__FILE__)) as $hostd) {
+foreach(ld('.') as $hostd) {
 	$host = basename($hostd);
 	foreach(ld($hostd) as $rund) {
 		$run = basename($rund);
