@@ -107,9 +107,7 @@ usort($runs, "rcmp");
 <td><?= $r['complete']?"completed":"running" ?></td>
 
 <?php foreach($tests as $t) { $ti = $r['tests'][$t]; ?>
-<td class="status-<?= $ti['success']?'success':($ti['complete']?'failed':'none') ?>"></td>
-
-
+<td><a href="<?= $r['path'] ?>/<?=$t?>.log"><div class="status status-<?= $ti['success']?'success':($ti['complete']?'failed':($ti['started']?'started':'none')) ?>"></div></a></td>
 <?php } ?>
 
 <td>R <?= $r['rver'] ?></td><td>M <a href="https://dev.monetdb.org/hg/MonetDB/rev/<?= $r['mrev'] ?>"><?= $r['mbranch'] ?></a></td><td><a href="<?= $r['path'] ?>/package-versions">Packages</a></td><td><a href="<?= $r['path'] ?>">Logfiles</a></td>

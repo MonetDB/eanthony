@@ -23,6 +23,7 @@ do
 	    exit -1
 	fi
 
+	# TODO: what to do if this fails?! sleep and retry?
 	# find latest testweb build for specified branch
 	HTML=`curl -s "http://monetdb.cwi.nl/testweb/web/status.php?branch=$MBRANCH"`
 	FURL=`echo -n "$HTML"| grep -m 1 -o "../web/\S*/" | sed 's|..|http://monetdb.cwi.nl/testweb|'`
