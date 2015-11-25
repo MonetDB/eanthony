@@ -1,0 +1,154 @@
+#!/bin/bash
+
+BASEDIR=/scratch/hannes/electricanthony
+
+while :
+do
+	RUNID=`date +%s`
+	echo $RUNID
+	date
+
+	# these files need to exist and denote R version and MonetDB HG branch to use
+	RTAG=`cat $BASEDIR/r-tag`
+	MBRANCH=`cat $BASEDIR/monetdb-branch`
+	RUNTESTS=$BASEDIR/runtests
+
+	if [ -z $RTAG ] || [ -z $MBRANCH ] ; then
+		echo "need to define R Tag and MonetDB branch names"
+	    exit -1
+	fi
+
+	if [ ! -f $RUNTESTS ] ; then
+		echo "need to define tests to run in  $RUNTESTS"
+	    exit -1
+	fi
+
+	# find latest testweb build for specified branch
+	HTML=`curl -s "http://monetdb.cwi.nl/testweb/web/status.php?branch=$MBRANCH"`
+	FURL=`echo -n "$HTML"| grep -m 1 -o "../web/\S*/" | sed 's|..|http://monetdb.cwi.nl/testweb|'`
+	MREV=`echo $FURL | grep -o "/[0-f:]*/$" | sed "s|/||g"`
+	MREVF=`echo $MREV | sed "s/:/_/"`
+
+	MINSTALLDIR=$BASEDIR/monetdb-install-$MREVF
+	MBIN=$MINSTALLDIR/bin/mserver5
+	MSRCDIR=$BASEDIR/monetdb-source-$MREVF	
+
+	RSRCDIR=$BASEDIR/r-source-$RTAG
+	RINSTALLDIR=$BASEDIR/r-install-$RTAG
+	RBIN=$RINSTALLDIR/bin/R
+	# R packages should be reinstalled with new R version
+	RLIBDIR=$BASEDIR/r-packages-$RTAG
+	RTMPDIR=$BASEDIR/r-tmp
+	RWDDIR=$BASEDIR/r-wd
+	LOGDIR=$BASEDIR/logs/$RUNID
+
+	rm $BASEDIR/logs/current
+	ln -s $LOGDIR $BASEDIR/logs/current
+
+	mkdir -p $RSRCDIR $RLIBDIR $RTMPDIR $RWDDIR $LOGDIR $RINSTALLDIR $MSRCDIR $MINSTALLDIR
+	if [ ! -d $MINSTALLDIR ]; then
+		echo "Unable to make install dirs."
+		exit -1
+	fi
+
+	# build R
+	# TODO: remove old R source/install/packages dirs
+	echo $RTAG > $LOGDIR/r-version
+	if [ ! -f $RBIN ] ; then
+		RTBURL="https://cran.r-project.org/src/base/R-3/R-$RTAG.tar.gz"
+		curl -s $RTBURL | tar xz -C $RSRCDIR --strip-components=1
+		cd $RSRCDIR
+		./configure --prefix=$RINSTALLDIR --with-x=no --without-recommended-packages > $LOGDIR/r-configure.out 2> $LOGDIR/r-configure.err
+		make > $LOGDIR/r-make.out 2> $LOGDIR/r-make.err
+		# make R install without latex
+		touch $RSRCDIR/doc/NEWS.pdf
+		touch $RSRCDIR/doc/RESOURCES
+		touch $RSRCDIR/doc/FAQ
+
+		make install >> $LOGDIR/r-make.out 2>> $LOGDIR/r-make.err
+		cd ..
+	fi
+	if [ ! -f $RBIN ] ; then
+		echo "Still no R. FML."
+		exit -1
+	fi
+
+	# build MonetDB
+	# TODO: remove old monetdb source/install dirs
+	echo $MREV > $LOGDIR/monetdb-revision
+	echo $MBRANCH > $LOGDIR/monetdb-branch
+	if [ ! -f $MBIN ] ; then
+		HTML2=`curl -s $FURL`
+		MTBURL=$FURL`echo $HTML2 | grep -o  "MonetDB-[^>]*\.tar\.bz2" | head -n 1`
+		curl -s $MTBURL | tar xj -C $MSRCDIR --strip-components=1
+
+		cd $MSRCDIR
+		./configure --prefix=$MINSTALLDIR \
+			--disable-fits --disable-geom --disable-rintegration --disable-gsl --disable-netcdf \
+			--disable-jdbc --disable-merocontrol --disable-odbc --disable-microhttpd \
+			--without-perl --without-python2 --without-python3 --without-rubygem --without-unixodbc \
+			--without-samtools --without-sphinxclient --without-geos --without-samtools  \
+			> $LOGDIR/monetdb-configure.out 2> $LOGDIR/monetdb-configure.err
+
+		make -j clean install > $LOGDIR/monetdb-make.out 2> $LOGDIR/monetdb-make.err
+		cd ..
+	fi
+	if [ ! -f $MBIN ] ; then
+		echo "Still no MonetDB. bleh."
+		exit -1
+	fi
+
+	export R_LIBS=$RLIBDIR TMP=$RTMPDIR TEMP=$RTMPDIR PATH=$MINSTALLDIR/bin:$PATH
+	# install/update various packages
+	$RBIN -f $BASEDIR/packages.R > $LOGDIR/packages.out 2> $LOGDIR/packages.err
+	# record versions of installed packages
+	$RBIN --slave -e "write.table(installed.packages(lib.loc='$RLIBDIR')[, c('Package','Version')], '$LOGDIR/package-versions', sep='\t', quote=F, row.names=F, col.names=F)"
+
+	if [ $? != 0 ]; then
+		echo "Package installation failure"
+		continue
+	else
+		touch $LOGDIR/packages-success
+	fi
+	# dangerous, but are there alternatives?
+	killall -9 mserver5
+	cp $RUNTESTS $LOGDIR
+
+	while read SCRIPT; do
+	  if [ -z $SCRIPT ] || [ ! -f $BASEDIR/$SCRIPT-setup.R ] ; then
+	  	echo "Could not run $SCRIPT"
+	  	continue
+	  fi
+	  (echo "running $SCRIPT"
+	  	touch $LOGDIR/$SCRIPT-started
+		export RWD=$RWDDIR/$SCRIPT
+		rm -rf $RWD 
+		mkdir -p $RWD
+		$RBIN -f $BASEDIR/$SCRIPT-setup.R > $LOGDIR/$SCRIPT-setup.out 2> $LOGDIR/$SCRIPT-setup.err
+		if [ $? != 0 ]; then
+			echo "$SCRIPT setup fail"
+		else
+			touch $LOGDIR/$SCRIPT-setup-success
+			$RBIN -f $BASEDIR/$SCRIPT-test.R > $LOGDIR/$SCRIPT-test.out 2> $LOGDIR/$SCRIPT-test.err
+			if [ $? != 0 ]; then
+				echo "$SCRIPT test fail"
+			else
+				touch $LOGDIR/$SCRIPT-test-success
+			fi
+		fi
+		touch $LOGDIR/$SCRIPT-complete
+	) &
+
+	done < $RUNTESTS
+	wait
+	touch $LOGDIR/complete
+	sleep 10
+done
+
+
+# TODO clean up r temp?
+# TODO: track R package versions
+# TODO: multiple OSes
+
+
+
