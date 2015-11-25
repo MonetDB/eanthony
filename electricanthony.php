@@ -79,7 +79,7 @@ usort($runs, "rcmp");
 <style>
 .status {
 	width: 20px;
-	height: 20px;
+	height: 10px;
 }
 .status-started {
 	background-color: #e9e9e9;
