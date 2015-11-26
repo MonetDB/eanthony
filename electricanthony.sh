@@ -80,7 +80,7 @@ do
 	echo $MBRANCH > $LOGDIR/monetdb-branch
 	if [ ! -f $MBIN ] ; then
 		HTML2=`curl -s $FURL`
-		MTBURL=`echo $HTML2 | grep -o  "MonetDB-[^>]*\.tar\.bz2" | head -n 1`
+		MTBURL=$FURL`echo $HTML2 | grep -o  "MonetDB-[^>]*\.tar\.bz2" | head -n 1`
 		curl -s $MTBURL | tar xj -C $MSRCDIR --strip-components=1
 
 		cd $MSRCDIR
