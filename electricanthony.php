@@ -50,7 +50,7 @@ foreach(ld('.') as $hostd) {
 		$runs[] = array(
 			host     => $host,
 			run      => $run,
-			runp     => date("Y-m-d h:i", $run),
+			runp     => date("Y-m-d H:i", $run),
 			mbranch  => gf($rund, 'monetdb-branch'),
 			mrev     => gf($rund, 'monetdb-revision'),
 			rver     => gf($rund, 'r-version'),
