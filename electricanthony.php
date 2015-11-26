@@ -77,6 +77,12 @@ usort($runs, "rcmp");
 <title>Electric Anthony</title>
 
 <style>
+body {
+	font-family: Helvetica, sans-serif;
+}
+td {
+	padding: 4px;
+}
 .status {
 	width: 20px;
 	height: 10px;
@@ -99,11 +105,8 @@ usort($runs, "rcmp");
 <tr>
 	<th></th>
 	<th></th>
-	<th></th>
 	<?= '<th>'.implode('</th><th>', $tests).'</th>' ?>
-	<th></th>
-	<th></th>
-
+	<th></th> 
 </tr>
 
 <?php foreach($runs as $r) { ?>
@@ -111,13 +114,14 @@ usort($runs, "rcmp");
 <tr>
 <td><?= $r['runp'] ?></td>
 <td><?= $r['host'] ?></td>
-<td><?= $r['complete']?"completed":"running" ?></td>
+<!--<td><?= $r['complete']?"completed":"running" ?></td>-->
 
 <?php foreach($tests as $t) { $ti = $r['tests'][$t]; ?>
 <td><a href="<?= $r['path'] ?>/<?=$t?>.log"><div class="status status-<?= $ti['success']?'success':($ti['complete']?'failed':($ti['started']?'started':'none')) ?>"></div></a></td>
 <?php } ?>
 
-<td>R <?= $r['rver'] ?></td><td>M <a href="https://dev.monetdb.org/hg/MonetDB/rev/<?= $r['mrev'] ?>"><?= $r['mbranch'] ?></a></td><td><a href="<?= $r['path'] ?>/package-versions">Packages</a></td><td><a href="<?= $r['path'] ?>">Logfiles</a></td>
+<!--<td>R <?= $r['rver'] ?></td><td>M <a href="https://dev.monetdb.org/hg/MonetDB/rev/<?= $r['mrev'] ?>"><?= $r['mbranch'] ?></a></td><td><a href="<?= $r['path'] ?>/package-versions">Packages</a></td>-->
+<td><a href="<?= $r['path'] ?>">logs</a></td>
 </tr>
 
 <?php } ?>
