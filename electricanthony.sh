@@ -144,8 +144,7 @@ do
 	  fi
 	  (echo "running $SCRIPT"
 	  	touch $LOGDIR/$SCRIPT-started
-		export RWD=$RWDDIR/$SCRIPT
-		rm -rf $RWD 
+		export RWD=$RWDDIR/$SCRIPT-$RUNID
 		mkdir -p $RWD
 		$RBIN -f $BASEDIR/$SCRIPT-setup.R > $LOGDIR/$SCRIPT.log 2>&1
 		if [ $? != 0 ]; then
@@ -160,6 +159,7 @@ do
 			fi
 		fi
 		touch $LOGDIR/$SCRIPT-complete
+		rm -rf $RWD
 	) &
 	sleep 1
 	done < $RUNTESTS
