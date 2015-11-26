@@ -93,7 +93,7 @@ do
 			rm -f $MSI
 			MTBURL=$FURL`echo $HTML2 | grep -o  "MonetDB5-SQL-Installer-x86_64-[^-]*\.msi" | head -n 1`
 			curl -s $MTBURL -o $MSI
-
+			cmd /C "msiexec.exe /a $MSI TARGETDIR=$MINSTALLDIR /qn"
 		else
 			MTBURL=$FURL`echo $HTML2 | grep -o  "MonetDB-[^>]*\.tar\.bz2" | head -n 1`
 			curl -s $MTBURL | tar xj -C $MSRCDIR --strip-components=1
@@ -114,7 +114,7 @@ do
 		exit -1
 	fi
 
-	export R_LIBS=$RLIBDIR TMP=$RTMPDIR TEMP=$RTMPDIR PATH=$MINSTALLDIR/bin:$PATH
+	export R_LIBS=$RLIBDIR TMP=$RTMPDIR TEMP=$RTMPDIR PATH=$MINSTALLDIR/bin:$PATH MONETDBINSTALLDIR=$MINSTALLDIR
 	# install/update various packages
 	$RBIN -f $BASEDIR/packages.R > $LOGDIR/packages.log 2>&1
 	# record versions of installed packages
@@ -132,8 +132,8 @@ do
 	else
 		killall -9 mserver5
 	fi
-	sleep 10
-	
+	sleep 60
+
 	cp $RUNTESTS $LOGDIR
 
 	while read SCRIPT; do
@@ -166,11 +166,5 @@ do
 	touch $LOGDIR/complete
 	sleep 10
 done
-
-
-# TODO clean up r temp?
-# TODO: track R package versions
-# TODO: multiple OSes
-
 
 
