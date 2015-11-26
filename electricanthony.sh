@@ -1,6 +1,9 @@
 #!/bin/bash
+#set -x
+BASEDIR=C:/cygwin64/home/hannes/eanthony
 
-BASEDIR=/scratch/hannes/electricanthony
+uname | grep -v CYGWIN > /dev/null
+ISWIN=$?
 
 while :
 do
@@ -37,6 +40,10 @@ do
 	RSRCDIR=$BASEDIR/r-source-$RTAG
 	RINSTALLDIR=$BASEDIR/r-install-$RTAG
 	RBIN=$RINSTALLDIR/bin/R
+	if [ $ISWIN ]; then
+		RBIN=$RBIN.exe
+		MBIN=$MBIN.exe	
+	fi
 	# R packages should be reinstalled with new R version
 	RLIBDIR=$BASEDIR/r-packages-$RTAG
 	RTMPDIR=$BASEDIR/r-tmp
@@ -54,8 +61,9 @@ do
 
 	# build R
 	# TODO: remove old R source/install/packages dirs
+	# TODO: auto-install new R versions on Windows?
 	echo $RTAG > $LOGDIR/r-version
-	if [ ! -f $RBIN ] ; then
+	if [ ! -f $RBIN ] && [ ! $ISWIN ] ; then
 		RTBURL="https://cran.r-project.org/src/base/R-3/R-$RTAG.tar.gz"
 		curl -s $RTBURL | tar xz -C $RSRCDIR --strip-components=1
 		cd $RSRCDIR
@@ -74,25 +82,32 @@ do
 		exit -1
 	fi
 
-	# build MonetDB
+	# build/install MonetDB
 	# TODO: remove old monetdb source/install dirs
 	echo $MREV > $LOGDIR/monetdb-revision
 	echo $MBRANCH > $LOGDIR/monetdb-branch
 	if [ ! -f $MBIN ] ; then
 		HTML2=`curl -s $FURL`
-		MTBURL=$FURL`echo $HTML2 | grep -o  "MonetDB-[^>]*\.tar\.bz2" | head -n 1`
-		curl -s $MTBURL | tar xj -C $MSRCDIR --strip-components=1
+		if [ $ISWIN ]; then
+			MSI=$BASEDIR/monetdbinstaller.msi
+			rm -f $MSI
+			MTBURL=$FURL`echo $HTML2 | grep -o  "MonetDB5-SQL-Installer-x86_64-[^-]*\.msi" | head -n 1`
+			curl -s $MTBURL -o $MSI
 
-		cd $MSRCDIR
-		./configure --prefix=$MINSTALLDIR \
-			--disable-fits --disable-geom --disable-rintegration --disable-gsl --disable-netcdf \
-			--disable-jdbc --disable-merocontrol --disable-odbc --disable-microhttpd \
-			--without-perl --without-python2 --without-python3 --without-rubygem --without-unixodbc \
-			--without-samtools --without-sphinxclient --without-geos --without-samtools  \
-			> $LOGDIR/monetdb-configure.log 2>&1
+		else
+			MTBURL=$FURL`echo $HTML2 | grep -o  "MonetDB-[^>]*\.tar\.bz2" | head -n 1`
+			curl -s $MTBURL | tar xj -C $MSRCDIR --strip-components=1
+			cd $MSRCDIR
+			./configure --prefix=$MINSTALLDIR \
+				--disable-fits --disable-geom --disable-rintegration --disable-gsl --disable-netcdf \
+				--disable-jdbc --disable-merocontrol --disable-odbc --disable-microhttpd \
+				--without-perl --without-python2 --without-python3 --without-rubygem --without-unixodbc \
+				--without-samtools --without-sphinxclient --without-geos --without-samtools  \
+				> $LOGDIR/monetdb-configure.log 2>&1
 
-		make -j clean install > $LOGDIR/monetdb-make.log 2>&1
-		cd ..
+			make -j clean install > $LOGDIR/monetdb-make.log 2>&1
+			cd ..
+		fi
 	fi
 	if [ ! -f $MBIN ] ; then
 		echo "Still no MonetDB. bleh."
@@ -112,7 +127,13 @@ do
 		touch $LOGDIR/packages-success
 	fi
 	# dangerous, but are there alternatives?
-	killall -9 mserver5
+	if [ $ISWIN ] ; then
+		taskkill /F /IM mserver5.exe /T
+	else
+		killall -9 mserver5
+	fi
+	sleep 10
+	
 	cp $RUNTESTS $LOGDIR
 
 	while read SCRIPT; do
@@ -139,7 +160,7 @@ do
 		fi
 		touch $LOGDIR/$SCRIPT-complete
 	) &
-
+	sleep 1
 	done < $RUNTESTS
 	wait
 	touch $LOGDIR/complete
