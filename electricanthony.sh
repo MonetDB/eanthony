@@ -79,7 +79,7 @@ do
 	echo $MBRANCH > $LOGDIR/monetdb-branch
 	if [ ! -f $MBIN ] ; then
 		HTML2=`curl -s $FURL`
-		MTBURL=$FURL`echo $HTML2 | grep -o  "MonetDB-[^>]*\.tar\.bz2" | head -n 1`
+		MTBURL=`echo $HTML2 | grep -o  "MonetDB-[^>]*\.tar\.bz2" | head -n 1`
 		curl -s $MTBURL | tar xj -C $MSRCDIR --strip-components=1
 
 		cd $MSRCDIR
@@ -114,6 +114,7 @@ do
 	killall -9 mserver5
 	cp $RUNTESTS $LOGDIR
 
+	# TODO: git update?
 	while read SCRIPT; do
 	  if [ -z $SCRIPT ] || [ ! -f $BASEDIR/$SCRIPT-setup.R ] ; then
 	  	echo "Could not run $SCRIPT"
