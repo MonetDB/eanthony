@@ -70,12 +70,16 @@ function rcmp($a, $b) {
 }
 usort($runs, "rcmp");
 
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
 ?>
 
 <html>
 <head>
 <title>Electric Anthony</title>
-
+<meta http-equiv="refresh" content="10">
 <style>
 body {
 	font-family: Helvetica, sans-serif;
