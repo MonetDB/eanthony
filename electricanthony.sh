@@ -94,8 +94,8 @@ do
 			MTBURL=$FURL`echo $HTML2 | grep -o  "MonetDB5-SQL-Installer-x86_64-[^-]*\.msi" | head -n 1`
 			curl -s $MTBURL -o $MSI
 			# switch those slashes just for cmd
-			MSIB=`echo $MSI | sed 's|/|\\|g'`
-			MINSTALLDIRB=`echo $MINSTALLDIR | sed 's|/|\\|g'`
+			MSIB=`echo $MSI | tr '/' '\\'`
+			MINSTALLDIRB=`echo $MINSTALLDIR | tr '/' '\\'`
 			cmd /C "msiexec.exe /a $MSIB TARGETDIR=$MINSTALLDIRB /qn"
 		else
 			MTBURL=$FURL`echo $HTML2 | grep -o  "MonetDB-[^>]*\.tar\.bz2" | head -n 1`
