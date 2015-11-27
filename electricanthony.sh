@@ -93,7 +93,10 @@ do
 			rm -f $MSI
 			MTBURL=$FURL`echo $HTML2 | grep -o  "MonetDB5-SQL-Installer-x86_64-[^-]*\.msi" | head -n 1`
 			curl -s $MTBURL -o $MSI
-			cmd /C "msiexec.exe /a $MSI TARGETDIR=$MINSTALLDIR /qn"
+			# switch those slashes just for cmd
+			MSIB=`echo $MSI | sed 's|/|\\|g'`
+			MINSTALLDIRB=`echo $MINSTALLDIR | sed 's|/|\\|g'`
+			cmd /C "msiexec.exe /a $MSIB TARGETDIR=$MINSTALLDIRB /qn"
 		else
 			MTBURL=$FURL`echo $HTML2 | grep -o  "MonetDB-[^>]*\.tar\.bz2" | head -n 1`
 			curl -s $MTBURL | tar xj -C $MSRCDIR --strip-components=1
@@ -161,7 +164,7 @@ do
 		touch $LOGDIR/$SCRIPT-complete
 		rm -rf $RWD
 	) &
-	sleep 1
+	sleep 10
 	done < $RUNTESTS
 	wait
 	touch $LOGDIR/complete
