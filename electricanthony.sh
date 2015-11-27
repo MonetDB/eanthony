@@ -1,6 +1,6 @@
 #!/bin/bash
 #set -x
-BASEDIR=C:/cygwin64/home/hannes/eanthony
+BASEDIR=/scratch/hannes/eanthony
 
 uname | grep -v CYGWIN > /dev/null
 ISWIN=$?
@@ -40,7 +40,7 @@ do
 	RSRCDIR=$BASEDIR/r-source-$RTAG
 	RINSTALLDIR=$BASEDIR/r-install-$RTAG
 	RBIN=$RINSTALLDIR/bin/R
-	if [ $ISWIN ]; then
+	if [ $ISWIN -eq 1 ]; then
 		RBIN=$RBIN.exe
 		MBIN=$MBIN.exe	
 	fi
@@ -63,7 +63,7 @@ do
 	# TODO: remove old R source/install/packages dirs
 	# TODO: auto-install new R versions on Windows?
 	echo $RTAG > $LOGDIR/r-version
-	if [ ! -f $RBIN ] && [ ! $ISWIN ] ; then
+	if [ ! -f $RBIN ] && [ $ISWIN -eq 0 ] ; then
 		RTBURL="https://cran.r-project.org/src/base/R-3/R-$RTAG.tar.gz"
 		curl -s $RTBURL | tar xz -C $RSRCDIR --strip-components=1
 		cd $RSRCDIR
@@ -88,7 +88,7 @@ do
 	echo $MBRANCH > $LOGDIR/monetdb-branch
 	if [ ! -f $MBIN ] ; then
 		HTML2=`curl -s $FURL`
-		if [ $ISWIN ]; then
+		if [ $ISWIN -eq 1 ]; then
 			MSI=$BASEDIR/monetdbinstaller.msi
 			rm -f $MSI
 			MTBURL=$FURL`echo $HTML2 | grep -o  "MonetDB5-SQL-Installer-x86_64-[^-]*\.msi" | head -n 1`
@@ -130,7 +130,7 @@ do
 		touch $LOGDIR/packages-success
 	fi
 	# dangerous, but are there alternatives?
-	if [ $ISWIN ] ; then
+	if [ $ISWIN -eq 1 ] ; then
 		taskkill /F /IM mserver5.exe /T
 	else
 		killall -9 mserver5
