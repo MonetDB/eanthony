@@ -2,8 +2,7 @@ setwd(Sys.getenv("RWD"))
 options(monetdb.debug.query=T)
 if (.Platform$OS.type == 'windows') {
 	batfile <- paste0(getwd(),"/MonetDB/bsapuf.bat")
-}
-else {
+} else {
 	batfile <- paste0(getwd(),"/MonetDB/bsapuf.sh")
 }
 
