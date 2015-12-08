@@ -101,7 +101,7 @@ do
 			MTBURL=$FURL`echo $HTML2 | grep -o  "MonetDB-[^>]*\.tar\.bz2" | head -n 1`
 			curl -s $MTBURL | tar xj -C $MSRCDIR --strip-components=1
 			cd $MSRCDIR
-			./configure --prefix=$MINSTALLDIR \
+			./configure --prefix=$MINSTALLDIR --enable-debug --enable-assert \
 				--disable-fits --disable-geom --disable-rintegration --disable-gsl --disable-netcdf \
 				--disable-jdbc --disable-merocontrol --disable-odbc --disable-microhttpd \
 				--without-perl --without-python2 --without-python3 --without-rubygem --without-unixodbc \
