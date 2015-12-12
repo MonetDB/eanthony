@@ -1,5 +1,8 @@
 <?php
 date_default_timezone_set('Europe/Amsterdam');
+ini_set("auto_detect_line_endings", true);
+
+error_reporting(E_ALL);
 
 function ld($d) {
 	$ret = array();
@@ -27,7 +30,7 @@ foreach(ld('.') as $hostd) {
 	$host = basename($hostd);
 	foreach(ld($hostd) as $rund) {
 		$run = basename($rund);
-
+		$runid = $host ."-".$run;
 		$ttests = array_unique(array_filter(explode("\n", 
 			gf($rund, 'runtests')), 'trim'));
 
@@ -38,26 +41,28 @@ foreach(ld('.') as $hostd) {
 
 		foreach($ttests as $t) {
 			$tr[$t] = array(
-				tname    => $t,
-				started  => fe($rund, $t.'-started'),
-				complete => fe($rund, $t.'-complete'),
-				setup    => fe($rund, $t.'-setup-success'),
-				test     => fe($rund, $t.'-test-success')
+				'tname'    => $t,
+				'started'  => fe($rund, $t.'-started'),
+				'complete' => fe($rund, $t.'-complete'),
+				'setup'    => fe($rund, $t.'-setup-success'),
+				'test'     => fe($rund, $t.'-test-success')
 			);
 			$tr[$t]['success'] = $tr[$t]['complete'] && $tr[$t]['setup'] && $tr[$t]['test'];
 		}
 
 		$runs[] = array(
-			host     => $host,
-			run      => $run,
-			runp     => date("Y-m-d H:i", $run),
-			mbranch  => gf($rund, 'monetdb-branch'),
-			mrev     => gf($rund, 'monetdb-revision'),
-			rver     => gf($rund, 'r-version'),
-			deps     => fe($rund, 'packages-success'),
-			complete => fe($rund, 'complete'),
-			path     => $host.DIRECTORY_SEPARATOR.$run,
-			tests    => $tr
+			'host'     => $host,
+			'run'      => $run,
+			'runid'    => $runid,
+			'runp'     => date("Y-m-d H:i", $run),
+			'runrfc'   => date("r", $run),
+			'mbranch'  => gf($rund, 'monetdb-branch'),
+			'mrev'     => gf($rund, 'monetdb-revision'),
+			'rver'     => gf($rund, 'r-version'),
+			'deps'     => fe($rund, 'packages-success'),
+			'complete' => fe($rund, 'complete'),
+			'path'     => $host.DIRECTORY_SEPARATOR.$run,
+			'tests'    => $tr
 		);
 	}	
 }
@@ -70,9 +75,51 @@ function rcmp($a, $b) {
 }
 usort($runs, "rcmp");
 
+function tail($filename, $nlines) {
+	$lines = array();
+	$fp = fopen($filename, "r");
+	while(!feof($fp)) {
+	   $line = fgets($fp);
+	   array_push($lines, $line);
+	   if (count($lines) > $nlines)
+	       array_shift($lines);
+	}
+	fclose($fp);
+	return(implode("", array_unique($lines)));
+}
+
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
+
+if (isset($_REQUEST['rss'])) {
+	header("Content-type: application/rss+xml");
+		print '<?xml version="1.0" encoding="UTF-8"?>
+	<rss version="2.0">
+	  <channel>
+	    <title>E. Anthony</title>
+	    <description>asdfree tests with MonetDB.R and MonetDBLite</description>';
+
+	foreach($runs as $r) {
+		$runinfo = "Run started at $r[runp] using R $r[rver] and MonetDB $r[mbranch]/$r[mrev]";
+		foreach($tests as $t) {
+			$ti = @$r['tests'][$t];
+			if ($ti['complete'] && !$ti['success']) {
+				$testinfo = "$ti[tname] failure on $r[host] ($runinfo)";
+				$logtail = htmlentities(tail("$r[path]/$t.log", 10));
+				print "
+	    <item>
+	      <title>$testinfo</title>
+	      <link>http://monetdb.cwi.nl/testweb/web/eanthony/#$r[runid]</link>
+	      <description>$logtail</description>
+	    </item>";
+			}
+		}
+	}
+	print '  </channel>
+	</rss>';
+	return;
+}
 
 ?>
 
@@ -121,11 +168,11 @@ td {
 <?php foreach($runs as $r) { ?>
 
 <tr>
-<td><?= $r['runp'] ?></td>
+<td><a name="<?=$r['runid']?>"></a><?= $r['runp'] ?></td>
 <td><?= $r['host'] ?></td>
 <!--<td><?= $r['complete']?"completed":"running" ?></td>-->
 
-<?php foreach($tests as $t) { $ti = $r['tests'][$t]; ?>
+<?php foreach($tests as $t) { $ti = @$r['tests'][$t]; ?>
 <td><a href="<?= $r['path'] ?>/<?=$t?>.log"><div class="status status-<?= $ti['success']?'success':($ti['complete']?'failed':($ti['started']?'started':'none')) ?>"></div></a></td>
 <?php } ?>
 
@@ -136,6 +183,11 @@ td {
 <?php } ?>
 
 </table>
+
+<br><br>
+<small>
+<a href="?rss">RSS</a>
+</small>
 
 </body>
 </html>
