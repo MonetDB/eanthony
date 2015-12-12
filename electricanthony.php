@@ -78,7 +78,7 @@ header("Pragma: no-cache");
 
 <html>
 <head>
-<title>Electric Anthony</title>
+<title>Electric A.</title>
 <meta http-equiv="refresh" content="10">
 <style>
 body {
@@ -88,8 +88,8 @@ td {
 	padding: 4px;
 }
 .status {
-	width: 20px;
-	height: 10px;
+	width: 12px;
+	height: 12px;
 }
 .status-started {
 	background-color: #e9e9e9;
@@ -100,16 +100,21 @@ td {
 .status-success {
 	background-color: #00CC33;
 }
+.vertical {
+	-webkit-writing-mode:vertical-rl; 
+	-ms-writing-mode:tb-rl; 
+	writing-mode:vertical-rl; 
+}
 </style>
 </head>
 
 <body>
-<h1>Electric Anthony</h1>
+<h1>Electric A.</h1>
 <table>
 <tr>
 	<th></th>
 	<th></th>
-	<?= '<th>'.implode('</th><th>', $tests).'</th>' ?>
+	<?= '<th><span class="vertical">'.implode('</th><th><span class="vertical">', $tests).'</span></th>' ?>
 	<th></th> 
 </tr>
 
