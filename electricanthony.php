@@ -97,7 +97,7 @@ if (isset($_REQUEST['rss'])) {
 		print '<?xml version="1.0" encoding="UTF-8"?>
 	<rss version="2.0">
 	  <channel>
-	    <title>E. Anthony</title>
+	    <title>Electric A.</title>
 	    <link>http://monetdb.cwi.nl/testweb/web/eanthony/</link>
 	    <description>asdfree tests with MonetDB.R and MonetDBLite</description>';
 
