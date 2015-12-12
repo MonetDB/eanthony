@@ -98,6 +98,7 @@ if (isset($_REQUEST['rss'])) {
 	<rss version="2.0">
 	  <channel>
 	    <title>E. Anthony</title>
+	    <link>http://monetdb.cwi.nl/testweb/web/eanthony/</link>
 	    <description>asdfree tests with MonetDB.R and MonetDBLite</description>';
 
 	foreach($runs as $r) {
@@ -112,6 +113,7 @@ if (isset($_REQUEST['rss'])) {
 	      <title>$testinfo</title>
 	      <link>http://monetdb.cwi.nl/testweb/web/eanthony/#$r[runid]</link>
 	      <description>$logtail</description>
+	      <guid>http://monetdb.cwi.nl/testweb/web/eanthony/#$r[runid]-$t</guid>
 	    </item>";
 			}
 		}
