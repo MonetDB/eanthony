@@ -30,7 +30,6 @@ foreach(ld('.') as $hostd) {
 	$host = basename($hostd);
 	foreach(ld($hostd) as $rund) {
 		$run = basename($rund);
-		$runid = $host ."-".$run;
 		$ttests = array_unique(array_filter(explode("\n", 
 			gf($rund, 'runtests')), 'trim'));
 
@@ -53,7 +52,6 @@ foreach(ld('.') as $hostd) {
 		$runs[] = array(
 			'host'     => $host,
 			'run'      => $run,
-			'runid'    => $runid,
 			'runp'     => date("Y-m-d H:i", $run),
 			'runrfc'   => date("r", $run),
 			'mbranch'  => gf($rund, 'monetdb-branch'),
@@ -111,9 +109,9 @@ if (isset($_REQUEST['rss'])) {
 				print "
 	    <item>
 	      <title>$testinfo</title>
-	      <link>http://monetdb.cwi.nl/testweb/web/eanthony/#$r[runid]</link>
+	      <link>http://monetdb.cwi.nl/testweb/web/eanthony/#$r[host]-$r[run]-$t</link>
 	      <description>$logtail</description>
-	      <guid>http://monetdb.cwi.nl/testweb/web/eanthony/#$r[runid]-$t</guid>
+	      <guid>http://monetdb.cwi.nl/testweb/web/eanthony/#$r[host]-$r[run]-$t</guid>
 	    </item>";
 			}
 		}
@@ -170,7 +168,7 @@ td {
 <?php foreach($runs as $r) { ?>
 
 <tr>
-<td><a name="<?=$r['runid']?>"></a><?= $r['runp'] ?></td>
+<td><?= $r['runp'] ?></td>
 <td><?= $r['host'] ?></td>
 <!--<td><?= $r['complete']?"completed":"running" ?></td>-->
 
