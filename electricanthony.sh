@@ -1,6 +1,13 @@
 #!/bin/bash
 #set -x
-BASEDIR=/scratch/hannes/eanthony
+BASEDIR=$EABASEDIR
+if [ -z $BASEDIR ] || [ ! -d $BASEDIR ]; then
+	echo "you need to set an existing basedir in \$EABASEDIR"
+    exit -1
+fi
+
+TIMEOUTCMD="timeout -k 40h 30h "
+LOGCMD="awk '{ print strftime(\"%Y-%m-%d %H:%M:%S\"), $0; fflush(); }'"
 
 uname | grep -v CYGWIN > /dev/null
 ISWIN=$?
@@ -22,7 +29,7 @@ do
 	fi
 
 	if [ ! -f $RUNTESTS ] ; then
-		echo "need to define tests to run in  $RUNTESTS"
+		echo "need to define tests to run in $RUNTESTS"
 	    exit -1
 	fi
 
@@ -139,7 +146,6 @@ do
 
 	cp $RUNTESTS $LOGDIR
 
-	# TODO: git update?
 	while read SCRIPT; do
 	  if [ -z $SCRIPT ] || [ ! -f $BASEDIR/$SCRIPT-setup.R ] ; then
 	  	echo "Could not run $SCRIPT"
@@ -149,12 +155,12 @@ do
 	  	touch $LOGDIR/$SCRIPT-started
 		export RWD=$RWDDIR/$SCRIPT-$RUNID
 		mkdir -p $RWD
-		$RBIN -f $BASEDIR/$SCRIPT-setup.R > $LOGDIR/$SCRIPT.log 2>&1
+		$TIMEOUTCMD $RBIN -f $BASEDIR/$SCRIPT-setup.R | $LOGCMD > $LOGDIR/$SCRIPT.log 2>&1
 		if [ $? != 0 ]; then
 			echo "$SCRIPT setup fail"
 		else
 			touch $LOGDIR/$SCRIPT-setup-success
-			$RBIN -f $BASEDIR/$SCRIPT-test.R >> $LOGDIR/$SCRIPT.log 2>&1
+			$TIMEOUTCMD $RBIN -f $BASEDIR/$SCRIPT-test.R | $LOGCMD >> $LOGDIR/$SCRIPT.log 2>&1
 			if [ $? != 0 ]; then
 				echo "$SCRIPT test fail"
 			else
