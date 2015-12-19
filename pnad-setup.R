@@ -3,7 +3,6 @@ options(monetdb.debug.query=T)
 
 if (.Platform$OS.type == 'windows') {
 	setInternet2( FALSE )						# # only windows users need this line
-	options(monetdb.programpath.override=Sys.getenv("MONETDBINSTALLDIR"))
 } else {
 	options( encoding = "windows-1252" )		# # only macintosh and *nix users need this line
 }
