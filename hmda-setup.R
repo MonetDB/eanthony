@@ -1,7 +1,5 @@
 setwd(Sys.getenv("RWD"))
-if (.Platform$OS.type == 'windows') {
-	options(monetdb.programpath.override=Sys.getenv("MONETDBINSTALLDIR"))
-} else {
+if (.Platform$OS.type != 'windows') {
 	path.to.7z <- "7za"
 }
 options(monetdb.debug.query=T)
