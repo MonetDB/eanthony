@@ -8,4 +8,4 @@ if (.Platform$OS.type == 'windows') {
 }
 
 years.to.download <- c( 2001:2009 , 2011:2014 )
-downloader::source_url( "https://raw.githubusercontent.com/ajdamico/asdfree/master/Pesquisa%20Nacional%20por%20Amostra%20de%20Domicilios/pnad.survey.R" , prompt = FALSE , echo = TRUE )
+downloader::source_url( "https://raw.githubusercontent.com/ajdamico/asdfree/master/Pesquisa%20Nacional%20por%20Amostra%20de%20Domicilios/download%20all%20microdata.R" , prompt = FALSE , echo = TRUE )
