@@ -1,7 +1,6 @@
 setwd(Sys.getenv("RWD"))
 if (.Platform$OS.type == 'windows') {
 	setInternet2(FALSE)
-	options(monetdb.programpath.override=Sys.getenv("MONETDBINSTALLDIR"))
 } else {
 	options(encoding="windows-1252")
 }
