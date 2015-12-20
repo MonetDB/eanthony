@@ -1,4 +1,9 @@
 setwd(Sys.getenv("RWD"))
+
+if (.Platform$OS.type == 'windows') {
+	path.to.winrar <- normalizePath( "C:/Program Files/winrar/winrar.exe" )		# # only windows users need this line
+}
+
 options( encoding = "windows-1252" )
 natality.sets.to.download <- 2013:1999
 periodlinked.sets.to.download <- 2011:2001
