@@ -1,4 +1,5 @@
 setwd(Sys.getenv("RWD"))
+options(monetdb.debug.query=T)
 if (.Platform$OS.type == 'windows') {
 	setInternet2(FALSE)
 } else {
