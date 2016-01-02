@@ -33,11 +33,7 @@ foreach(ld('.') as $hostd) {
 		$ttests = array_unique(array_filter(explode("\n", 
 			gf($rund, 'runtests')), 'trim'));
 
-		$tests = array_unique(array_merge($tests, $ttests));
-		asort($tests);
-
 		$tr = array();
-
 		foreach($ttests as $t) {
 			$tr[$t] = array(
 				'tname'    => $t,
@@ -72,6 +68,12 @@ function rcmp($a, $b) {
     return ($a['run'] > $b['run']) ? -1 : 1;
 }
 usort($runs, "rcmp");
+
+for ($i = 0; $i < min(5, sizeof($runs)); $i++) {
+	$tests = array_unique(array_merge($tests, array_keys($runs[$i]['tests'])));
+	asort($tests);
+}
+
 
 function tail($filename, $nlines) {
 	$lines = array();
