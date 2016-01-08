@@ -6,9 +6,6 @@ if [ -z $BASEDIR ] || [ ! -d $BASEDIR ]; then
     exit -1
 fi
 
-TIMEOUTCMD="timeout -k 40h 30h "
-LOGCMD="awk '{ print strftime(\"%Y-%m-%d %H:%M:%S\"), $0; fflush(); }'"
-
 uname | grep -v CYGWIN > /dev/null
 ISWIN=$?
 
@@ -76,7 +73,7 @@ do
 		exit -1
 	fi
 
-	export R_LIBS=$RLIBDIR TMP=$RTMPDIR TEMP=$RTMPDIR
+	export R_LIBS=$RLIBDIR TMP=$RTMPDIR TEMP=$RTMPDIR PATH=$PATH:$RINSTALLDIR/bin
 	# install/update various packages
 	$RBIN -f $BASEDIR/packages.R > $LOGDIR/packages.log 2>&1
 	# record versions of installed packages
@@ -101,12 +98,12 @@ do
 	  	touch $LOGDIR/$SCRIPT-started
 		export RWD=$RWDDIR/$SCRIPT-$RUNID
 		mkdir -p $RWD
-		$TIMEOUTCMD $RBIN -f $BASEDIR/$SCRIPT-setup.R 2>&1 | $LOGCMD > $LOGDIR/$SCRIPT.log 
+		timeout -k 40h 30h $RBIN -f $BASEDIR/$SCRIPT-setup.R 2>&1 | awk '{print strftime("%Y-%m-%d %H:%M:%S"), $0; fflush(); }' > $LOGDIR/$SCRIPT.log 
 		if [ $? != 0 ]; then
 			echo "$SCRIPT setup fail"
 		else
 			touch $LOGDIR/$SCRIPT-setup-success
-			$TIMEOUTCMD $RBIN -f $BASEDIR/$SCRIPT-test.R 2>&1 | $LOGCMD >> $LOGDIR/$SCRIPT.log 
+			timeout -k 40h 30h $RBIN -f $BASEDIR/$SCRIPT-test.R 2>&1 | awk '{print strftime("%Y-%m-%d %H:%M:%S"), $0; fflush(); }' >> $LOGDIR/$SCRIPT.log 
 			if [ $? != 0 ]; then
 				echo "$SCRIPT test fail"
 			else
