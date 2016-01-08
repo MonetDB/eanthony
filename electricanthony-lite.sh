@@ -88,33 +88,34 @@ do
 	sleep 1
 
 	cp $RUNTESTS $LOGDIR
+	RTESTS=`cat $RUNTESTS`
 
-	while read SCRIPT; do
-	  if [ -z $SCRIPT ] || [ ! -f $BASEDIR/$SCRIPT-setup.R ] ; then
-	  	echo "Could not run $SCRIPT"
+	for RSCRIPT in $RTESTS ; do
+	  if [ -z $RSCRIPT ] || [ ! -f $BASEDIR/$RSCRIPT-setup.R ] ; then
+	  	echo "Could not run $RSCRIPT"
 	  	continue
 	  fi
-	  (echo "running $SCRIPT"
-	  	touch $LOGDIR/$SCRIPT-started
-		export RWD=$RWDDIR/$SCRIPT-$RUNID
+	  (echo "running $RSCRIPT"
+	   	touch $LOGDIR/$RSCRIPT-started
+		export RWD=$RWDDIR/$RSCRIPT-$RUNID
 		mkdir -p $RWD
-		timeout -k 40h 30h $RBIN -f $BASEDIR/$SCRIPT-setup.R 2>&1 | awk '{print strftime("%Y-%m-%d %H:%M:%S"), $0; fflush(); }' > $LOGDIR/$SCRIPT.log 
+		timeout -k 40h 30h $RBIN -f $BASEDIR/$RSCRIPT-setup.R 2>&1 | awk '{print strftime("%Y-%m-%d %H:%M:%S"), $0; fflush(); }' > $LOGDIR/$RSCRIPT.log 
 		if [ $? != 0 ]; then
-			echo "$SCRIPT setup fail"
-		else
-			touch $LOGDIR/$SCRIPT-setup-success
-			timeout -k 40h 30h $RBIN -f $BASEDIR/$SCRIPT-test.R 2>&1 | awk '{print strftime("%Y-%m-%d %H:%M:%S"), $0; fflush(); }' >> $LOGDIR/$SCRIPT.log 
+		 	echo "$RSCRIPT setup fail"
+		 else
+		 	touch $LOGDIR/$RSCRIPT-setup-success
+			timeout -k 40h 30h $RBIN -f $BASEDIR/$RSCRIPT-test.R 2>&1 | awk '{print strftime("%Y-%m-%d %H:%M:%S"), $0; fflush(); }' >> $LOGDIR/$RSCRIPT.log 
 			if [ $? != 0 ]; then
-				echo "$SCRIPT test fail"
+				echo "$RSCRIPT test fail"
 			else
-				touch $LOGDIR/$SCRIPT-test-success
+				touch $LOGDIR/$RSCRIPT-test-success
 			fi
 		fi
-		touch $LOGDIR/$SCRIPT-complete
+		touch $LOGDIR/$RSCRIPT-complete
 		rm -rf $RWD
-	) &
-	sleep 1
-	done < $RUNTESTS
+	  ) &
+	  sleep 1
+	  done
 	wait
 	touch $LOGDIR/complete
 	sleep 10
