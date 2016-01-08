@@ -1,5 +1,6 @@
 #!/bin/bash
 #set -x
+
 BASEDIR=$EABASEDIR
 if [ -z $BASEDIR ] || [ ! -d $BASEDIR ]; then
 	echo "you need to set an existing basedir in \$EABASEDIR"
@@ -99,6 +100,7 @@ do
 	   	touch $LOGDIR/$RSCRIPT-started
 		export RWD=$RWDDIR/$RSCRIPT-$RUNID
 		mkdir -p $RWD
+		set -o pipefail
 		timeout -k 40h 30h $RBIN -f $BASEDIR/$RSCRIPT-setup.R 2>&1 | awk '{print strftime("%Y-%m-%d %H:%M:%S"), $0; fflush(); }' > $LOGDIR/$RSCRIPT.log 
 		if [ $? != 0 ]; then
 		 	echo "$RSCRIPT setup fail"
