@@ -1,5 +1,0 @@
-setwd(Sys.getenv("RWD"))
-load('pes 2010 design.rda')
-downloader::source_url( "https://raw.githubusercontent.com/hannesmuehleisen/asdfree/master/Censo%20Demografico/analysis%20examples.R" , prompt = FALSE , echo = TRUE )
-load('dom 2010 design.rda')
-downloader::source_url( "https://raw.githubusercontent.com/hannesmuehleisen/asdfree/master/Censo%20Demografico/variable%20recode%20example.R" , prompt = FALSE , echo = TRUE )
