@@ -7,3 +7,8 @@ single.year.datasets.to.download <- 2005:2014
 three.year.datasets.to.download <- 2007:2013
 five.year.datasets.to.download <- 2009:2014
 downloader::source_url( "https://raw.githubusercontent.com/ajdamico/asdfree/master/American%20Community%20Survey/download%20all%20microdata.R" , prompt = FALSE , echo = TRUE )
+
+# corruption sniffing
+db <- dbConnect( MonetDBLite() , dbfolder )
+corruption_trigger <- "select tables.name, columns.name, location from tables inner join columns on tables.id=columns.table_id left join storage on tables.name=storage.table and columns.name=storage.column where location is null"
+dbGetQuery( db , corruption_trigger )
