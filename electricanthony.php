@@ -85,7 +85,7 @@ function tail($filename, $nlines) {
 	       array_shift($lines);
 	}
 	fclose($fp);
-	return(implode("", array_unique($lines)));
+	return(substr(implode("", array_unique($lines)),-3000));
 }
 
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
@@ -101,8 +101,8 @@ if (isset($_REQUEST['rss'])) {
 	    <link>http://monetdb.cwi.nl/testweb/web/eanthony/</link>
 	    <description>asdfree tests with MonetDB.R and MonetDBLite</description>';
 
-	foreach($runs as $r) {
-		$runinfo = "Run started at $r[runp] using R $r[rver] and MonetDB $r[mbranch]/$r[mrev]";
+	foreach(array_slice($runs, 0, 20) as $r) {
+		$runinfo = "Run started at $r[runp] using R $r[rver]";
 		foreach($tests as $t) {
 			$ti = @$r['tests'][$t];
 			if ($ti['complete'] && !$ti['success']) {
@@ -128,7 +128,7 @@ if (isset($_REQUEST['rss'])) {
 <html>
 <head>
 <title>Electric A.</title>
-<meta http-equiv="refresh" content="10">
+<meta id="meta-refresh" http-equiv="refresh" content="10">
 <style>
 body {
 	font-family: Helvetica, sans-serif;
@@ -158,28 +158,22 @@ td {
 </head>
 
 <body>
-<h1>Electric A.</h1>
+<!--<h1>Electric A.</h1>-->
 <table>
 <tr>
 	<th></th>
-	<th></th>
 	<?= '<th><span class="vertical">'.implode('</th><th><span class="vertical">', $tests).'</span></th>' ?>
-	<th></th> 
 </tr>
 
-<?php foreach($runs as $r) { ?>
+<?php foreach(array_slice($runs, 0, 20) as $r) { ?>
 
 <tr>
-<td><?= $r['runp'] ?></td>
-<td><?= $r['host'] ?></td>
-<!--<td><?= $r['complete']?"completed":"running" ?></td>-->
+<td><a href="<?= $r['path'] ?>"><img src="<?= (strpos($r[host], 'win') !== FALSE) ? 'windows.png' : 'tux.png' ?>" style="height: 20px;"/><!--<?= $r['host'] ?>--></a></td>
 
 <?php foreach($tests as $t) { $ti = @$r['tests'][$t]; ?>
 <td><a href="<?= $r['path'] ?>/<?=$t?>.log"><div class="status status-<?= $ti['success']?'success':($ti['complete']?'failed':($ti['started']?'started':'none')) ?>"></div></a></td>
 <?php } ?>
 
-<!--<td>R <?= $r['rver'] ?></td><td>M <a href="https://dev.monetdb.org/hg/MonetDB/rev/<?= $r['mrev'] ?>"><?= $r['mbranch'] ?></a></td><td><a href="<?= $r['path'] ?>/package-versions">Packages</a></td>-->
-<td><a href="<?= $r['path'] ?>">logs</a></td>
 </tr>
 
 <?php } ?>
@@ -188,8 +182,9 @@ td {
 
 <br><br>
 <small>
-<a href="?rss">RSS</a>
+<a href="?rss">RSS</a>&nbsp;&nbsp;
 </small>
 
+<a href="wilbur.html"><img src="wilbur.png" title="Wilbur approved testing" style="position: fixed; right: 20px; bottom: 1px; height: 200px"/></a>
 </body>
 </html>
