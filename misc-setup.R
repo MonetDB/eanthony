@@ -1,5 +1,7 @@
 setwd(Sys.getenv("RWD"))
 
+options(warn=2)
+
 library(MonetDB.R)
 library(MonetDBLite)
 
