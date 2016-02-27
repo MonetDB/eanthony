@@ -1,5 +1,9 @@
 setwd(Sys.getenv("RWD"))
 
+if (.Platform$OS.type != 'windows') {
+	path.to.7z <- "7za"
+}
+
 downloader::source_url( "https://raw.githubusercontent.com/davidbrae/swmap/master/how%20to%20map%20the%20american%20community%20survey.R" , prompt = FALSE , echo = TRUE )
 
 # corruption sniffing
