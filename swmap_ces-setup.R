@@ -1,5 +1,9 @@
 setwd(Sys.getenv("RWD"))
 
+if (.Platform$OS.type != 'windows') {
+	options( encoding = "windows-1252" )		# # only macintosh and *nix users need this line
+}
+
 downloader::source_url( "https://raw.githubusercontent.com/davidbrae/swmap/master/how%20to%20map%20the%20consumer%20expenditure%20survey.R" , prompt = FALSE , echo = TRUE )
 
 # corruption sniffing
