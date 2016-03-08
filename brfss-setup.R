@@ -1,14 +1,3 @@
-
-
-# temporary addition to have brfss re-download everything
-if( Sys.Date() < "2016-03-10" ){
-
-	options( "download_cached.usecache" = FALSE )
-	options( "download_cached.savecache" = TRUE )
-
-}
-
-
 setwd(Sys.getenv("RWD"))
 if (.Platform$OS.type == 'windows') {
 	setInternet2(FALSE)
