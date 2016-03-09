@@ -1,7 +1,7 @@
 setwd(Sys.getenv("RWD"))
 
-# temporary addition to have brfss re-download everything
-if( Sys.Date() < "2016-03-12" ){
+# temporary addition to have pums re-download everything
+if( Sys.Date() < "2016-03-15" ){
 
 	options( "download_cached.usecache" = FALSE )
 	options( "download_cached.savecache" = TRUE )
