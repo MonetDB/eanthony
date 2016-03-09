@@ -1,4 +1,7 @@
 setwd(Sys.getenv("RWD"))
+
+memory.limit(128000)
+
 options(monetdb.debug.query=T)
 if (.Platform$OS.type != 'windows') {
 	path.to.7z <- "7za"
