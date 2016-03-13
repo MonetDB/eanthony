@@ -1,5 +1,9 @@
 load( "nacjd login.rda" )
 
+if (.Platform$OS.type != 'windows') {
+	options( encoding = "windows-1252" )
+}
+
 setwd(Sys.getenv("RWD"))
 
 downloader::source_url( "https://raw.githubusercontent.com/ajdamico/asdfree/master/National%20Crime%20Victimization%20Survey/download%20all%20microdata.R" , prompt = FALSE , echo = TRUE )
