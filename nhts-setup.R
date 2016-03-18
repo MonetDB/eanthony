@@ -1,12 +1,3 @@
-
-# temporary addition to have nhts re-download everything
-if( Sys.Date() < "2016-03-18" ){
-
-	options( "download_cached.usecache" = FALSE )
-	options( "download_cached.savecache" = TRUE )
-
-}
-
 setwd(Sys.getenv("RWD"))
 options(monetdb.debug.query=T)
 years.to.download <- c( 1983 , 1990 , 1995 , 2001 , 2009 )

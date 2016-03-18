@@ -1,14 +1,4 @@
 setwd(Sys.getenv("RWD"))
-
-# temporary addition to have pums re-download everything
-if( Sys.Date() < "2016-03-15" ){
-
-	options( "download_cached.usecache" = FALSE )
-	options( "download_cached.savecache" = TRUE )
-
-}
-
-
 options(encoding="windows-1252")
 one.percent.files.to.download <- c( 1990 , 2000 )
 five.percent.files.to.download <- c( 1990 , 2000 )
