@@ -6,6 +6,6 @@ if(length(np)) install.packages(np,repos=repos)
 # update if neccessary
 update.packages(repos=repos, ask=F)
 # special snowflakes
-install.packages(c("MonetDB.R", "MonetDBLite"), repos=c("http://dev.monetdb.org/Assets/R/", "http://cran.rstudio.com/"))
+install.packages(c("MonetDB.R", "MonetDBLite"), repos=c("https://dev.monetdb.org/Assets/R/", "http://cran.rstudio.com/"))
 # this sometimes breaks
 devtools::install_github("BioStatMatt/sas7bdat.parso")
