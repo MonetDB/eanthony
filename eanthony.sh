@@ -60,7 +60,7 @@ do
 		curl -s $RTBURL | tar xz -C $RSRCDIR --strip-components=1
 		cd $RSRCDIR
 		./configure --prefix=$RINSTALLDIR --with-x=no --without-recommended-packages > $LOGDIR/r-configure.log 2>&1
-		make > $LOGDIR/r-make.log 2>&1
+		make DEBUG=T > $LOGDIR/r-make.log 2>&1
 		# make R install without latex
 		touch $RSRCDIR/doc/NEWS.pdf
 		touch $RSRCDIR/doc/RESOURCES
