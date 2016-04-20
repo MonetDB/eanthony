@@ -82,6 +82,7 @@ for ($i = 0; $i < sizeof($runs); $i++) {
 		}
 		for($j = $i + 1; $j < sizeof($runs); $j++) {
 			if ($runs[$i]['host'] == $runs[$j]['host']) {
+				$runs[$j]['tests'][$test]['complete'] = true;
 				$runs[$i]['tests'][$test]['changed'] = (!isset($runs[$j]['tests'][$test]) || 
 				$result['success'] != $runs[$j]['tests'][$test]['success']);
 				break;
