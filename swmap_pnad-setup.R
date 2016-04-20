@@ -1,13 +1,12 @@
 setwd(Sys.getenv("RWD"))
+
 if (.Platform$OS.type == 'windows') {
-	setInternet2(FALSE)
+	setInternet2( FALSE )						# # only windows users need this line
 } else {
-	options(encoding="windows-1252")
+	options( encoding = "windows-1252" )		# # only macintosh and *nix users need this line
 }
-options(monetdb.debug.query=T)
-options(monetdb.debug.control=T)
-years.to.download <- 1984:2014
-downloader::source_url("https://raw.githubusercontent.com/ajdamico/asdfree/master/Behavioral%20Risk%20Factor%20Surveillance%20System/download%20all%20microdata.R" , prompt = FALSE , echo = TRUE)
+
+downloader::source_url( "https://raw.githubusercontent.com/davidbrae/swmap/master/how%20to%20map%20the%20pesquisa%20nacional%20por%20amostra%20de%20domicilios.R" , prompt = FALSE , echo = TRUE )
 
 # corruption sniffing
 db <- dbConnect( MonetDBLite() , dbfolder )

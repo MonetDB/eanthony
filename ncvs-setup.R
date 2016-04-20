@@ -1,9 +1,12 @@
-setwd(Sys.getenv("RWD"))
-path.to.7z <- "7za"
-options(monetdb.debug.query=T)
+load( "nacjd login.rda" )
 
-options( encoding = "windows-1252" )
-downloader::source_url( "https://raw.githubusercontent.com/ajdamico/asdfree/master/National%20Plan%20and%20Provider%20Enumeration%20System/download%20and%20import.R" , prompt = FALSE , echo = TRUE )
+if (.Platform$OS.type != 'windows') {
+	options( encoding = "windows-1252" )
+}
+
+setwd(Sys.getenv("RWD"))
+
+downloader::source_url( "https://raw.githubusercontent.com/ajdamico/asdfree/master/National%20Crime%20Victimization%20Survey/download%20all%20microdata.R" , prompt = FALSE , echo = TRUE )
 
 
 # corruption sniffing

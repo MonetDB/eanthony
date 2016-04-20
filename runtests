@@ -1,11 +1,13 @@
 acs
+acs2
 brfss
 bsapuf
 censo
-censolite
 ces
 cps
 hmda
+misc
+ncvs
 nhts
 nibrs
 nppes
@@ -15,5 +17,9 @@ pnad
 pums
 sbo
 sipp
+sipp08
 timss
-timsslite
+seer
+swmap_acs
+swmap_cps
+swmap_pnad
