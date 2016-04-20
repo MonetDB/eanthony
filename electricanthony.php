@@ -75,6 +75,22 @@ for ($i = 0; $i < min(5, sizeof($runs)); $i++) {
 }
 
 
+for ($i = 0; $i < sizeof($runs); $i++) {
+	foreach($runs[$i]['tests'] as $test => $result) {
+		if (!$result['complete']) {
+			continue;
+		}
+		for($j = $i + 1; $j < sizeof($runs); $j++) {
+			if ($runs[$i]['host'] == $runs[$j]['host']) {
+				$runs[$i]['tests'][$test]['changed'] = (!isset($runs[$j]['tests'][$test]) || 
+				$result['success'] != $runs[$j]['tests'][$test]['success']);
+				break;
+			} 
+		}
+	}
+}
+
+
 function tail($filename, $nlines) {
 	$lines = array();
 	$fp = fopen($filename, "r");
@@ -120,7 +136,13 @@ if (isset($_REQUEST['rss'])) {
 	}
 	print '  </channel>
 	</rss>';
-	return;
+	die();
+}
+
+if (isset($_REQUEST['debug'])) {
+	print "<pre>";
+	print_r($runs);
+	die();
 }
 
 ?>
@@ -141,14 +163,23 @@ td {
 	height: 12px;
 }
 .status-started {
-	background-color: #e9e9e9;
+	border: 1px solid #e9e9e9;
 }
-.status-failed {
+.status-failed-changed {
 	background-color: #FF6633;
 }
-.status-success {
+.status-success-changed {
 	background-color: #00CC33;
 }
+
+.status-failed {
+	background-color: #FCC9B8;
+}
+.status-success {
+	background-color: #B3E6C0;
+}
+
+
 .vertical {
 	-webkit-writing-mode:vertical-rl; 
 	-ms-writing-mode:tb-rl; 
@@ -165,13 +196,13 @@ td {
 	<?= '<th><span class="vertical">'.implode('</th><th><span class="vertical">', $tests).'</span></th>' ?>
 </tr>
 
-<?php foreach(array_slice($runs, 0, 20) as $r) { ?>
+<?php foreach(array_slice($runs, 0, 50) as $r) { ?>
 
 <tr>
 <td><a href="<?= $r['path'] ?>"><img src="<?= (strpos($r[host], 'win') !== FALSE) ? 'windows.png' : 'tux.png' ?>" style="height: 20px;"/><!--<?= $r['host'] ?>--></a></td>
 
 <?php foreach($tests as $t) { $ti = @$r['tests'][$t]; ?>
-<td><a href="<?= $r['path'] ?>/<?=$t?>.log"><div class="status status-<?= $ti['success']?'success':($ti['complete']?'failed':($ti['started']?'started':'none')) ?>"></div></a></td>
+<td><a href="<?= $r['path'] ?>/<?=$t?>.log"><div class="status status-<?= $ti['success']?'success':($ti['complete']?'failed':($ti['started']?'started':'none')) ?><?= $ti['changed']?'-changed':''?>"></div></a></td>
 <?php } ?>
 
 </tr>
@@ -185,6 +216,8 @@ td {
 <a href="?rss">RSS</a>&nbsp;&nbsp;
 </small>
 
-<a href="wilbur.html"><img src="wilbur.png" title="Wilbur approved testing" style="position: fixed; right: 20px; bottom: 1px; height: 200px"/></a>
+<!-- <img src="wilbur.png" title="Wilbur approved testing" style="position: fixed; right: 20px; bottom: 1px; height: 200px"/> -->
+<img src="trump.png" title="Make MonetDBLite great again!" style="position: fixed; right: 20px; top: 10px; height: 200px"/>
+
 </body>
 </html>
