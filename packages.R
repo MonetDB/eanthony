@@ -9,3 +9,5 @@ update.packages(repos=repos, ask=F)
 install.packages(c("MonetDB.R", "MonetDBLite"), repos=c("https://dev.monetdb.org/Assets/R/", "http://cran.rstudio.com/"))
 # this sometimes breaks
 devtools::install_github("BioStatMatt/sas7bdat.parso")
+# my bugfriend's back and he's gonna be trouble.  hey now, hey now, my bugfriend's back.
+devtools::install_github( "djalmapessoa/convey" )
