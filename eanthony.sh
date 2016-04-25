@@ -89,7 +89,7 @@ do
 	sleep 1
 
 	cp $RUNTESTS $LOGDIR
-	RTESTS=`cat $RUNTESTS`
+	RTESTS=`cat $RUNTESTS | shuf`
 
 	for RSCRIPT in $RTESTS ; do
 	  if [ -z $RSCRIPT ] || [ ! -f $BASEDIR/$RSCRIPT-setup.R ] ; then
