@@ -1,10 +1,10 @@
 setwd(Sys.getenv("RWD"))
 
-options(warn=2)
-
 library(DBI)			# load the DBI package (implements the R-database coding)
 library(MonetDB.R)
 library(MonetDBLite)
+
+options(warn=2)
 
 dbfolder <- paste0( getwd() , "/space MonetDB" )
 db <- dbConnect( MonetDBLite() , dbfolder )
