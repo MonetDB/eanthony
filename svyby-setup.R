@@ -66,7 +66,7 @@ coef(a)
 confint(a, df=degf(rclus1))
 
 ## ratio estimates
-svyby(~api_stu, by=~stype, denominator=~enroll, design=dclus1, svyratio)
+svyby(~api_stu+enroll, by=~stype, denominator=~enroll, design=dclus1, svyratio)
 
 ## empty groups
 svyby(~api00,~comp_imp+sch_wide,design=dclus1,svymean)
