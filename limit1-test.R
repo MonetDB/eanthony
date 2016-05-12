@@ -1,5 +1,9 @@
 setwd(Sys.getenv("RWD"))
 
+library(DBI)
+library(MonetDB.R)
+library(MonetDBLite)
+
 pnad.dbfolder <- paste0( getwd() , "/MonetDB" )
 
 # corruption sniffing
