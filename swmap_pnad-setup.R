@@ -1,6 +1,6 @@
 setwd(Sys.getenv("RWD"))
 
-if (.Platform$OS.type == 'windows') options( encoding = "windows-1252" )		# # only macintosh and *nix users need this line
+if (.Platform$OS.type != 'windows') options( encoding = "windows-1252" )		# # only macintosh and *nix users need this line
 
 
 downloader::source_url( "https://raw.githubusercontent.com/davidbrae/swmap/master/how%20to%20map%20the%20pesquisa%20nacional%20por%20amostra%20de%20domicilios.R" , prompt = FALSE , echo = TRUE )
