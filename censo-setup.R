@@ -1,5 +1,7 @@
 setwd(Sys.getenv("RWD"))
 
+memory.limit(64000)
+
 if (.Platform$OS.type != 'windows') options(encoding="latin1")	
 
 

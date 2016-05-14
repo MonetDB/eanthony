@@ -1,5 +1,7 @@
 setwd(Sys.getenv("RWD"))
 
+memory.limit(64000)
+
 if (.Platform$OS.type != 'windows') options( encoding = "windows-1252" )		# # only macintosh and *nix users need this line
 
 
