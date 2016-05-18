@@ -74,7 +74,7 @@ do
 		exit -1
 	fi
 
-	export R_LIBS=$RLIBDIR TMP=$RTMPDIR TEMP=$RTMPDIR PATH=$PATH:$RINSTALLDIR/bin
+	export R_LIBS=$RLIBDIR PATH=$PATH:$RINSTALLDIR/bin TMP=$RTMPDIR TEMP=$RTMPDIR
 	# install/update various packages
 	$RBIN -f $BASEDIR/packages.R > $LOGDIR/packages.log 2>&1
 	# record versions of installed packages
@@ -99,6 +99,8 @@ do
 	  (echo "running $RSCRIPT"
 	   	touch $LOGDIR/$RSCRIPT-started
 		export RWD=$RWDDIR/$RSCRIPT-$RUNID
+		export TMP=$RTMPDIR/$RSCRIPT TEMP=$RTMPDIR/$RSCRIPT
+		mkdir -p $TMP
 		mkdir -p $RWD
 		set -o pipefail
 		timeout -k 40h 30h $RBIN -f $BASEDIR/$RSCRIPT-setup.R 2>&1 | awk '{print strftime("%Y-%m-%d %H:%M:%S"), $0; fflush(); }' > $LOGDIR/$RSCRIPT.log 
