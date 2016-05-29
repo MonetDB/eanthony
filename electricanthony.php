@@ -115,8 +115,8 @@ if (isset($_REQUEST['rss'])) {
 	<rss version="2.0">
 	  <channel>
 	    <title>Electric A.</title>
-	    <link>http://monetdb.cwi.nl/testweb/web/eanthony/</link>
-	    <description>asdfree tests with MonetDB.R and MonetDBLite</description>';
+	    <link>http://monetdb.cwi.nl/testweb/web/sisyphus/</link>
+	    <description>asdfree tests with MonetDBLite</description>';
 
 	foreach(array_slice($runs, 0, 20) as $r) {
 		$runinfo = "Run started at $r[runp] using R $r[rver]";
@@ -128,9 +128,9 @@ if (isset($_REQUEST['rss'])) {
 				print "
 	    <item>
 	      <title>$testinfo</title>
-	      <link>http://monetdb.cwi.nl/testweb/web/eanthony/#$r[host]-$r[run]-$t</link>
+	      <link>http://monetdb.cwi.nl/testweb/web/sisyphus/#$r[host]-$r[run]-$t</link>
 	      <description>$logtail</description>
-	      <guid>http://monetdb.cwi.nl/testweb/web/eanthony/#$r[host]-$r[run]-$t</guid>
+	      <guid>http://monetdb.cwi.nl/testweb/web/sisyphus/#$r[host]-$r[run]-$t</guid>
 	    </item>";
 			}
 		}
