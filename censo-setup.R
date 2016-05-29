@@ -1,10 +1,9 @@
 setwd(Sys.getenv("RWD"))
 
-if (.Platform$OS.type == 'windows') {
-	setInternet2(FALSE)
-} else {
-	options(encoding="latin1")	
-}
+memory.limit(64000)
+
+if (.Platform$OS.type != 'windows') options(encoding="latin1")	
+
 
 years.to.download <- c( 2000 , 2010 )
 downloader::source_url( "https://raw.githubusercontent.com/ajdamico/asdfree/master/Censo%20Demografico/download%20and%20import.R" , prompt = FALSE , echo = TRUE )

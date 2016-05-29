@@ -6,6 +6,7 @@ options(monetdb.debug.query=T)
 if (.Platform$OS.type != 'windows') {
 	path.to.7z <- "7za"
 }
+include_puerto_rico <- TRUE
 single.year.datasets.to.download <- 2011:2014
 three.year.datasets.to.download <- 2011:2013
 five.year.datasets.to.download <- 2011:2014

@@ -1,9 +1,5 @@
 setwd(Sys.getenv("RWD"))
-if (.Platform$OS.type == 'windows') {
-	setInternet2(FALSE)
-} else {
-	options(encoding="windows-1252")
-}
+if (.Platform$OS.type != 'windows') options(encoding="windows-1252")
 options(monetdb.debug.query=T)
 options(monetdb.debug.control=T)
 years.to.download <- 1984:2014

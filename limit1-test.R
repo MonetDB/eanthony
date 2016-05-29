@@ -1,16 +1,12 @@
 setwd(Sys.getenv("RWD"))
 
-options(warn=2)
-
-library(DBI)			# load the DBI package (implements the R-database coding)
+library(DBI)
 library(MonetDB.R)
 library(MonetDBLite)
 
-dbfolder <- paste0( getwd() , "/space MonetDB" )
-db <- dbConnect( MonetDBLite() , dbfolder )
-
+pnad.dbfolder <- paste0( getwd() , "/MonetDB" )
 
 # corruption sniffing
-db <- dbConnect( MonetDBLite() , dbfolder )
+db <- dbConnect( MonetDBLite() , pnad.dbfolder )
 corruption_trigger <- "select tables.name, columns.name, location from tables inner join columns on tables.id=columns.table_id left join storage on tables.name=storage.table and columns.name=storage.column where location is null"
 dbGetQuery( db , corruption_trigger )
