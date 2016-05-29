@@ -2,7 +2,7 @@
 date_default_timezone_set('Europe/Amsterdam');
 ini_set("auto_detect_line_endings", true);
 
-error_reporting(E_ALL);
+error_reporting(E_WARNING);
 
 function ld($d) {
 	$ret = array();
@@ -114,8 +114,8 @@ if (isset($_REQUEST['rss'])) {
 		print '<?xml version="1.0" encoding="UTF-8"?>
 	<rss version="2.0">
 	  <channel>
-	    <title>Electric A.</title>
-	    <link>http://monetdb.cwi.nl/testweb/web/eanthony/</link>
+	    <title>Sisyphus</title>
+	    <link>http://monetdb.cwi.nl/testweb/web/sisyphus/</link>
 	    <description>asdfree tests with MonetDB.R and MonetDBLite</description>';
 
 	foreach(array_slice($runs, 0, 20) as $r) {
@@ -128,9 +128,9 @@ if (isset($_REQUEST['rss'])) {
 				print "
 	    <item>
 	      <title>$testinfo</title>
-	      <link>http://monetdb.cwi.nl/testweb/web/eanthony/#$r[host]-$r[run]-$t</link>
+	      <link>http://monetdb.cwi.nl/testweb/web/sisyphus/#$r[host]-$r[run]-$t</link>
 	      <description>$logtail</description>
-	      <guid>http://monetdb.cwi.nl/testweb/web/eanthony/#$r[host]-$r[run]-$t</guid>
+	      <guid>http://monetdb.cwi.nl/testweb/web/sisyphus/#$r[host]-$r[run]-$t</guid>
 	    </item>";
 			}
 		}
@@ -150,7 +150,7 @@ if (isset($_REQUEST['debug'])) {
 
 <html>
 <head>
-<title>Electric A.</title>
+<title>Σίσυφος</title>
 <meta id="meta-refresh" http-equiv="refresh" content="10">
 <style>
 body {
@@ -184,7 +184,11 @@ td {
 .vertical {
 	-webkit-writing-mode:vertical-rl; 
 	-ms-writing-mode:tb-rl; 
-	writing-mode:vertical-rl; 
+	writing-mode:vertical-rl;
+}
+
+th, td {
+	width: 20px;
 }
 </style>
 </head>
@@ -192,12 +196,12 @@ td {
 <body>
 <!--<h1>Electric A.</h1>-->
 <table>
-<tr>
+<tr style="height: 200px">
 	<th></th>
 	<?= '<th><span class="vertical">'.implode('</th><th><span class="vertical">', $tests).'</span></th>' ?>
 </tr>
 
-<?php foreach(array_slice($runs, 0, 50) as $r) { ?>
+<?php foreach(array_slice($runs, 0, 20) as $r) { ?>
 
 <tr>
 <td><a href="<?= $r['path'] ?>"><img src="<?= (strpos($r[host], 'win') !== FALSE) ? 'windows.png' : 'tux.png' ?>" style="height: 20px;"/><!--<?= $r['host'] ?>--></a></td>
@@ -217,8 +221,10 @@ td {
 <a href="?rss">RSS</a>&nbsp;&nbsp;
 </small>
 
-<!-- <img src="wilbur.png" title="Wilbur approved testing" style="position: fixed; right: 20px; bottom: 1px; height: 200px"/> -->
-<img src="trump.png" title="Make MonetDBLite great again!" style="position: fixed; right: 20px; top: 10px; height: 200px"/>
+<img src="sysiphos.png" title="Nekyia: Persephone supervising Sisyphus pushing his rock in the Underworld. Side A of an Attic black-figure amphora, ca. 530 BC. From Vulci." style="position: fixed; left: 10px; top: 10px; height: 80px"/>
+
+ <img src="wilbur.png" title="Wilbur approved testing" style="position: fixed; right: 20px; bottom: 1px; height: 200px"/>
+<!--<img src="trump.png" title="Make MonetDBLite great again!" style="position: fixed; right: 20px; top: 10px; height: 200px"/>-->
 
 </body>
 </html>
