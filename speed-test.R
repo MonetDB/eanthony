@@ -91,8 +91,9 @@ for( i in 10^(2:8) ){
 	dbRemoveTable( monetdb_con , 'my_mergetable' )
 	rm( DT , my_df , DTm , my_mergetable ) ; gc()
 
-	print( results )
-	
 }
-	
+
+
+print( results )
+		
 
