@@ -116,7 +116,7 @@ if (isset($_REQUEST['rss'])) {
 	  <channel>
 	    <title>Sisyphus</title>
 	    <link>http://monetdb.cwi.nl/testweb/web/sisyphus/</link>
-	    <description>asdfree tests with MonetDB.R and MonetDBLite</description>';
+	    <description>asdfree tests with MonetDBLite</description>';
 
 	foreach(array_slice($runs, 0, 20) as $r) {
 		$runinfo = "Run started at $r[runp] using R $r[rver]";
