@@ -13,7 +13,7 @@ source_url( "https://raw.githubusercontent.com/ajdamico/asdfree/master/Pesquisa%
 
 
 pnad.dbfolder <- paste0( getwd() , "/MonetDB" )
-db <- dbConnect( MonetDBLite() , pnad.dbfolder )
+db <- dbConnect( MonetDBLite::MonetDBLite() , pnad.dbfolder )
 dbListTables(db)
 
 sample.pnad <- svydesign( id = ~v4618 , strata = ~v4617 , data = 'pnad2011' , weights = ~pre_wgt , nest = TRUE , dbtype = "MonetDBLite" , dbname = pnad.dbfolder )
