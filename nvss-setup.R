@@ -4,6 +4,7 @@ if (.Platform$OS.type == 'windows') {
 	path.to.winrar <- normalizePath( "C:/Program Files/winrar/winrar.exe" )		# # only windows users need this line
 } else {
 	options( encoding = "windows-1252" )
+	path.to.7z <- "7za"															# # only macintosh and *nix users need this line
 }
 
 natality.sets.to.download <- 2014:1999
