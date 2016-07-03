@@ -1,6 +1,9 @@
 setwd(Sys.getenv("RWD"))
 
 
+if (.Platform$OS.type == 'windows' ) options("pkgType"='both')
+
+
 replace_sqlite_with_monetdblite_in_cran_pkgs <-
 	function( package_name ){
 
@@ -27,7 +30,7 @@ replace_sqlite_with_monetdblite_in_cran_pkgs <-
 			missing_packages <- cran_suggests[ !cran_suggests %in% rownames(installed.packages()) ]
 			
 			# some packages are not available on windows, so just do yer best
-			if( length( missing_packages ) > 0 ) try( install.packages( missing_packages , repos = "http://cran.rstudio.com/" , type = 'both' ) , silent = TRUE )
+			if( length( missing_packages ) > 0 ) try( install.packages( missing_packages , repos = "http://cran.rstudio.com/" , verbose = FALSE , quiet = TRUE ) , silent = TRUE )
 		}
 		
 		# download the package source file
@@ -47,29 +50,37 @@ replace_sqlite_with_monetdblite_in_cran_pkgs <-
 		# check for dependencies not currently available
 		failed_dep <- try( devtools::load_all(local_file_path) , silent = TRUE )
 
-		prior_missing <- ''
-		missing_packages <- NULL
-		
-		while( ( class( failed_dep ) == 'try-error' ) & !identical( missing_packages , prior_missing ) ){
+		if( class( failed_dep ) == 'try-error' ){
 			
-			missing_packages <- gsub( "(.*)Dependency package (.*) not available(.*)" , "\\2" , failed_dep[1] )
+			prior_missing <- ''
+			missing_packages <- NULL
+			
+			while( !identical( missing_packages , prior_missing ) ){
+				
+				missing_packages <- gsub( "(.*)Dependency package (.*) not available(.*)" , "\\2" , failed_dep[1] )
 
-			install.packages( missing_packages , repos = "http://cran.rstudio.com/" , type = 'both' )
-			
-			prior_missing <- missing_packages
-			
-			failed_dep <- try( devtools::load_all(local_file_path) , silent = TRUE )
+				install.packages( missing_packages , repos = "http://cran.rstudio.com/" , verbose = FALSE , quiet = TRUE )
+				
+				prior_missing <- missing_packages
+				
+				failed_dep <- try( devtools::load_all(local_file_path) , silent = TRUE )
+				
+				missing_packages <- gsub( "(.*)Dependency package (.*) not available(.*)" , "\\2" , failed_dep[1] )
+
+			}
 			
 		}
-			
 
 		# using the package source from cran, figure out the errors in the current version using RSQLite #
 
+		# before without run don't test or vignettes
+		before_output <- devtools::check( local_file_path , quiet = TRUE , vignettes = FALSE )
+
 		# before without run don't test
-		before_wo_rdt <- devtools::check( local_file_path , quiet = TRUE )
+		try( before_output <- devtools::check( local_file_path , quiet = TRUE ) , silent = TRUE )
 
 		# before with run don't test
-		before_w_rdt <- devtools::check( local_file_path , run_dont_test = TRUE , quiet = TRUE )
+		try( before_output <- devtools::check( local_file_path , run_dont_test = TRUE , quiet = TRUE ) , silent = TRUE )
 
 
 		# overwrite RSQLite with MonetDBLite
@@ -88,46 +99,38 @@ replace_sqlite_with_monetdblite_in_cran_pkgs <-
 
 		# using the package source from cran, figure out the errors in the current version using MonetDBLite #
 
+		# before without run don't test or vignettes
+		after_output <- devtools::check( local_file_path , quiet = TRUE , vignettes = FALSE )
+
 		# before without run don't test
-		after_w_rdt <- devtools::check( local_file_path , quiet = TRUE )
+		try( after_output <- devtools::check( local_file_path , quiet = TRUE ) , silent = TRUE )
 
 		# before with run don't test
-		after_wo_rdt <- devtools::check( local_file_path , run_dont_test = TRUE , quiet = TRUE )
+		try( after_output <- devtools::check( local_file_path , run_dont_test = TRUE , quiet = TRUE ) , silent = TRUE )
 
-
+		
 		# moment of truth: did overwriting MonetDBLite with RSQLite affect anything?
 		for( i in c( 'errors' , 'warnings' , 'notes' ) ){
 
-			if( !identical( before_wo_rdt[ i ] , after_wo_rdt[ i ] ) ){
+			if( !identical( before_output[ i ] , after_output[ i ] ) ){
 
 				cat( "\n\n\nbefore SQLite -> MonetDBLite replacement\n\n\n" )
-				print( before_wo_rdt )
+				print( before_output[ i ] )
 				cat( "\n\n\nafter SQLite -> MonetDBLite replacement\n\n\n" )
-				print( after_wo_rdt )
-
-				stop( paste( i , "before vs after output does not match with run_dont_test=FALSE" ) )
+				print( after_output[ i ] )
 				
 			}
 
-			if( !identical( before_w_rdt[ i ] , after_w_rdt[ i ] ) ){
-
-				cat( "\n\n\nbefore SQLite -> MonetDBLite replacement\n\n\n" )
-				print( before_w_rdt )
-				cat( "\n\n\nafter SQLite -> MonetDBLite replacement\n\n\n" )
-				print( after_w_rdt )
-				
-				stop( paste( i , "before vs after output does not match with run_dont_test=TRUE" ) )
-
-			}
-			
 		}
+		
 
-		TRUE
+		# if the before vs after objects are the same, return NULL else return the after-object
+		if( identical( before_output , after_output ) ) invisible( NULL ) else after_output
 	}
 	
 
 # works july 2nd, 2016
-replace_sqlite_with_monetdblite_in_cran_pkgs( 'twitteR' )
+# replace_sqlite_with_monetdblite_in_cran_pkgs( 'twitteR' )
 
 
 # replace_sqlite_with_monetdblite_in_cran_pkgs( 'trackeR' )
@@ -145,5 +148,12 @@ RSQLite_reverse_imports
 RSQLite_reverse_depends
 RSQLite_reverse_suggests
 
-# in a perfect world:
-# for( j in c( RSQLite_reverse_imports , RSQLite_reverse_depends , RSQLite_reverse_suggests ) ) replace_sqlite_with_monetdblite_in_cran_pkgs( j )
+for( j in c( RSQLite_reverse_imports , RSQLite_reverse_depends , RSQLite_reverse_suggests ) ) {
+
+	print( paste( "currently attempting" , j ) )
+
+	a <- try( b <- replace_sqlite_with_monetdblite_in_cran_pkgs( j ) , silent = TRUE )
+
+	if( class( a ) == 'try-error' ) print( a )
+
+}
