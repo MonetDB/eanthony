@@ -12,7 +12,10 @@ for( j in 1:10 ){
 	this_tempdir_b <- paste0( tempdir() , j , 'b' )
 	this_tempdir_c <- paste0( tempdir() , j , 'c' )
 	
-	dir.create( this_tempdir )
+	dir.create( this_tempdir_a )
+	dir.create( this_tempdir_b )
+	dir.create( this_tempdir_c )
+	
 	download_cached( "https://github.com/DjalmaPessoa/convey/archive/master.zip" , tf , mode = 'wb' )
 	unzip( tf , exdir = this_tempdir_a )
 	
