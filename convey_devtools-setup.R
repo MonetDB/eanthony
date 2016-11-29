@@ -8,41 +8,45 @@ download_cached( "https://github.com/DjalmaPessoa/convey/archive/master.zip" , t
 
 for( j in 1:10 ){
 
-	dir.create( tempdir() )
-	download_cached( "https://github.com/DjalmaPessoa/convey/archive/master.zip" , tf , mode = 'wb' )
-	unzip( tf , exdir = tempdir() )
+	this_tempdir_a <- paste0( tempdir() , j , 'a' )
+	this_tempdir_b <- paste0( tempdir() , j , 'b' )
+	this_tempdir_c <- paste0( tempdir() , j , 'c' )
 	
-	dtt <- devtools::test( paste0( tempdir() , '/convey-master' ) )
+	dir.create( this_tempdir )
+	download_cached( "https://github.com/DjalmaPessoa/convey/archive/master.zip" , tf , mode = 'wb' )
+	unzip( tf , exdir = this_tempdir_a )
+	
+	dtt <- devtools::test( paste0( this_tempdir_a , '/convey-master' ) )
 
 	print( dtt )
 
 	if( any( dtt$error ) ) stop( paste0( "devtools::test returned an error on iteration " , j ) )
 
-	unlink( tempdir() , recursive = TRUE ) ; Sys.sleep( 10 )
+	unlink( this_tempdir_a , recursive = TRUE ) ; Sys.sleep( 10 )
 	
-	dir.create( tempdir() )
+	dir.create( this_tempdir_b )
 	download_cached( "https://github.com/DjalmaPessoa/convey/archive/master.zip" , tf , mode = 'wb' )
-	unzip( tf , exdir = tempdir() )
+	unzip( tf , exdir = this_tempdir_b )
 	
-	dtc <- devtools::check( paste0( tempdir() , '/convey-master' ) , vignettes = FALSE )
+	dtc <- devtools::check( paste0( this_tempdir_b , '/convey-master' ) , vignettes = FALSE )
 
 	print( dtc )
 
 	if( length( dtc$errors ) > 0 ) stop( paste0( "devtools::check returned an error on iteration " , j ) )
 
-	unlink( tempdir() , recursive = TRUE ) ; Sys.sleep( 10 )
+	unlink( this_tempdir_b , recursive = TRUE ) ; Sys.sleep( 10 )
 
-	dir.create( tempdir() )
+	dir.create( this_tempdir_c )
 	download_cached( "https://github.com/DjalmaPessoa/convey/archive/master.zip" , tf , mode = 'wb' )
-	unzip( tf , exdir = tempdir() )
+	unzip( tf , exdir = this_tempdir_c )
 	
-	dtcrdt <- devtools::check( paste0( tempdir() , '/convey-master' ) , run_dont_test = TRUE , vignettes = FALSE )
+	dtcrdt <- devtools::check( paste0( this_tempdir_c , '/convey-master' ) , run_dont_test = TRUE , vignettes = FALSE )
 
 	print( dtcrdt )
 
 	if( length( dtcrdt$errors ) > 0 ) stop( paste0( "devtools::check with run_dont_test=TRUE returned an error on iteration " , j ) )
 
-	unlink( tempdir() , recursive = TRUE ) ; Sys.sleep( 10 )
+	unlink( this_tempdir_c , recursive = TRUE ) ; Sys.sleep( 10 )
 	
 }
 
