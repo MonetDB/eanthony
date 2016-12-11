@@ -6,7 +6,7 @@ tf <- tempfile()
 
 download_cached( "https://github.com/DjalmaPessoa/convey/archive/master.zip" , tf , mode = 'wb' , usecache = FALSE , savecache = TRUE )
 
-for( j in 1:10 ){
+for( j in 1:8 ){
 
 	this_tempdir_a <- paste0( tempdir() , j , 'a' )
 	this_tempdir_b <- paste0( tempdir() , j , 'b' )
