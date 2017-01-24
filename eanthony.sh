@@ -74,7 +74,7 @@ do
 		exit -1
 	fi
 
-	export R_LIBS=$RLIBDIR PATH=$PATH:$RINSTALLDIR/bin TMP=$RTMPDIR TEMP=$RTMPDIR
+	export R_LIBS=$RLIBDIR PATH=$RINSTALLDIR/bin:/cygdrive/c/Rtools/bin:$PATH TMP=$RTMPDIR TEMP=$RTMPDIR
 	# install/update various packages
 	$RBIN -f $BASEDIR/packages.R > $LOGDIR/packages.log 2>&1
 	# record versions of installed packages
