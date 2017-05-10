@@ -11,4 +11,4 @@ machine_specific_replacements <-
 		
 	)
 
-source( lodown::syntaxtractor( "swmap_acs" , replacements = machine_specific_replacements , setup_test = "setup" ) , echo = TRUE )
+source( lodown::syntaxtractor( "uspums" , replacements = machine_specific_replacements , setup_test = "setup" ) , echo = TRUE )

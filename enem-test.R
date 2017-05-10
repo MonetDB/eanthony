@@ -11,4 +11,4 @@ machine_specific_replacements <-
 		
 	)
 
-source( lodown::syntaxtractor( "swmap_acs" , replacements = machine_specific_replacements , setup_test = "setup" ) , echo = TRUE )
+source( lodown::syntaxtractor( "enem" , replacements = machine_specific_replacements , setup_test = "test" ) , echo = TRUE )

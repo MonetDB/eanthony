@@ -1,1 +1,0 @@
-setwd(Sys.getenv("RWD"))
