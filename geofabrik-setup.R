@@ -1,5 +1,8 @@
 setwd( Sys.getenv( "RWD" ) )
 
+# option to disable cache because geofabrik files are too big
+options( "lodown.cachaca.savecache" = FALSE )
+
 machine_specific_replacements <- 
 	list( 
 		
