@@ -4,7 +4,7 @@ machine_specific_replacements <-
 	list( 
 		
 		# replace the folder path on macnix
-		c( 'file.path( path.expand( \"~\" ) ) \"GSS\" )' , getwd() ) ,
+		c( 'file.path( path.expand( \"~\" ) , \"GSS\" )' , getwd() ) ,
 		
 		# change other things in the script to be run
 		c( "hello" , "howdy" )
