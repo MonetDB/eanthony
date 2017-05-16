@@ -1,9 +1,14 @@
+setwd( Sys.getenv( "RWD" ) )
 
+machine_specific_replacements <- 
+	list( 
+		
+		# replace the folder path on macnix
+		c( 'file.path( path.expand( \"~\" ) ) "CONVEY_DEVTOOLS" )' , getwd() ) ,
+		
+		# change other things in the script to be run
+		c( "hello" , "howdy" )
+		
+	)
 
-# run the exact same convey_testthats again, post-shutdown.
-
-library(lodown)
-temp_file <- tempfile()
-download.file( "https://raw.githubusercontent.com/ajdamico/eanthony/master/convey_devtools-setup.R" , temp_file , mode = 'wb' )
-source( temp_file , echo = TRUE )
-
+source( lodown::syntaxtractor( "convey_devtools" , replacements = machine_specific_replacements , setup_test = "test" ) , echo = TRUE )
