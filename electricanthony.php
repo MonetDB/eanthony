@@ -122,7 +122,7 @@ if (isset($_REQUEST['rss'])) {
 		$runinfo = "Run started at $r[runp] using R $r[rver]";
 		foreach($tests as $t) {
 			$ti = @$r['tests'][$t];
-			if ($ti['complete'] && !$ti['success']) {
+			if ($ti['complete'] && !$ti['success'] && $ti['changed']) {
 				$testinfo = "$ti[tname] failure on $r[host] ($runinfo)";
 				$logtail = htmlentities(tail("$r[path]/$t.log", 10));
 				print "
