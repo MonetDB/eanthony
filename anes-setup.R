@@ -1,5 +1,7 @@
 setwd( Sys.getenv( "RWD" ) )
 
+my_email_address <- readRDS( "my_email_address.rds" )
+
 machine_specific_replacements <- 
 	list( 
 		
@@ -7,7 +9,9 @@ machine_specific_replacements <-
 		c( 'path.expand( \"~\" ) , \"ANES\"' , paste0( '"' , getwd() , '"' ) ) ,
 		
 		# change other things in the script to be run
-		c( "hello" , "howdy" )
+		c( "hello" , "howdy" ) ,
+		
+		c( '"email@address.com"' , 'my_email_address' )
 		
 	)
 

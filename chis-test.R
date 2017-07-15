@@ -1,5 +1,9 @@
 setwd( Sys.getenv( "RWD" ) )
 
+chis_username <- readRDS( "chis_username.rds" )
+
+chis_password <- readRDS( "chis_password.rds" )
+
 machine_specific_replacements <- 
 	list( 
 		
@@ -7,7 +11,11 @@ machine_specific_replacements <-
 		c( 'path.expand( \"~\" ) , \"CHIS\"' , paste0( '"' , getwd() , '"' ) ) ,
 		
 		# change other things in the script to be run
-		c( "hello" , "howdy" )
+		c( "hello" , "howdy" ) ,
+		
+		c( '"username"' , 'chis_username' ) ,
+		
+		c( '"password"' , 'chis_password' )
 		
 	)
 
