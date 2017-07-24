@@ -1,6 +1,5 @@
 acs
 acs2
-addhealth
 brfss
 bsapuf
 censo
@@ -9,11 +8,9 @@ convey_devtools
 cps_asec
 cps_basic
 datasus
-dhs
 enem
 geofabrik
 hmda
-hrs
 ipums
 mapd_cpsc
 ma_sc_penetration
@@ -24,17 +21,13 @@ nibrs
 nls
 nps
 nppes
-nsduh
 nvss
-pew
 pisa
 pnad
 pof
-psid
 saeb
 sbo
 seer
-share
 siasih
 sipp
 speed
@@ -47,4 +40,3 @@ swmap_nychvs
 swmap_pnad
 timss
 uspums
-wvs
