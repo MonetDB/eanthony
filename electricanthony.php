@@ -115,22 +115,22 @@ if (isset($_REQUEST['rss'])) {
 	<rss version="2.0">
 	  <channel>
 	    <title>Sisyphus</title>
-	    <link>http://monetdb.cwi.nl/testweb/web/sisyphus/</link>
+	    <link>https://sisyphus.project.cwi.nl/</link>
 	    <description>asdfree tests with MonetDBLite</description>';
 
 	foreach(array_slice($runs, 0, 20) as $r) {
 		$runinfo = "Run started at $r[runp] using R $r[rver]";
 		foreach($tests as $t) {
 			$ti = @$r['tests'][$t];
-			if ($ti['complete'] && !$ti['success']) {
+			if ($ti['complete'] && !$ti['success'] && $ti['changed']) {
 				$testinfo = "$ti[tname] failure on $r[host] ($runinfo)";
 				$logtail = htmlentities(tail("$r[path]/$t.log", 10));
 				print "
 	    <item>
 	      <title>$testinfo</title>
-	      <link>http://monetdb.cwi.nl/testweb/web/sisyphus/#$r[host]-$r[run]-$t</link>
+	      <link>https://sisyphus.project.cwi.nl/$r[host]/$r[run]/$t.log</link>
 	      <description>$logtail</description>
-	      <guid>http://monetdb.cwi.nl/testweb/web/sisyphus/#$r[host]-$r[run]-$t</guid>
+	      <guid>https://sisyphus.project.cwi.nl/$r[host]/$r[run]/$t.log</guid>
 	    </item>";
 			}
 		}
