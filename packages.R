@@ -1,4 +1,8 @@
+
 install.packages(c( "data.table" , "RSQLite" , "devtools" ) , repos="http://cran.rstudio.com/")
+
+update.packages( repos="http://cran.rstudio.com/" , ask = FALSE , quiet = TRUE , type = if ( .Platform$OS.type == 'windows' ) 'win.binary' else 'source' )
+
 devtools::install_github( "gergness/srvyr" , dependencies = TRUE )
 devtools::install_github( "djalmapessoa/convey" , dependencies = TRUE )
 devtools::install_github( "ajdamico/lodown" , dependencies = TRUE )
