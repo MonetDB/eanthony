@@ -1,5 +1,5 @@
 
-install.packages(c( "data.table" , "RSQLite" , "devtools" ) , repos="http://cran.rstudio.com/")
+install.packages(c( "data.table" , "RSQLite" , "devtools" , "roxygen2" ) , repos="http://cran.rstudio.com/")
 
 update.packages( repos="http://cran.rstudio.com/" , ask = FALSE , quiet = TRUE , type = if ( .Platform$OS.type == 'windows' ) 'win.binary' else 'source' )
 
