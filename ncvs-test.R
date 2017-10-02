@@ -1,8 +1,8 @@
-setwd( Sys.getenv( "RWD" ) )
-
 my_email_address <- readRDS( "my_email_address.rds" )
 
 icpsr_password <- readRDS( "icpsr_password.rds" )
+
+setwd( Sys.getenv( "RWD" ) )
 
 machine_specific_replacements <- 
 	list( 

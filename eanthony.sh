@@ -16,6 +16,8 @@ do
 	echo $RUNID
 	date
 
+	git -C $BASEDIR pull
+	
 	# these files need to exist and denote R version and MonetDB HG branch to use
 	RTAG=`cat $BASEDIR/r-tag`
 	RUNTESTS=$BASEDIR/runtests

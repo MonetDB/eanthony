@@ -4,3 +4,4 @@ r-install-*
 r-packages-*
 r-source-*
 logs
+*.rds

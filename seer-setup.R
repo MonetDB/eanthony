@@ -1,3 +1,7 @@
+seer_username <- readRDS( "seer username.rds" )
+
+seer_password <- readRDS( "seer password.rds" )
+
 setwd( Sys.getenv( "RWD" ) )
 
 machine_specific_replacements <- 
@@ -7,7 +11,11 @@ machine_specific_replacements <-
 		c( 'path.expand( \"~\" ) , \"SEER\"' , paste0( '"' , getwd() , '"' ) ) ,
 		
 		# change other things in the script to be run
-		c( "hello" , "howdy" )
+		c( "hello" , "howdy" ) ,
+		
+		c( '"username"' , 'seer_username' ) ,
+		
+		c( '"password"' , 'seer_password' )
 		
 	)
 
