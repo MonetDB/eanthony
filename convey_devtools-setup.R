@@ -1,10 +1,8 @@
 setwd(Sys.getenv("RWD"))
 
-library(lodown)
-
 tf <- tempfile()
 
-cachaca( "https://github.com/DjalmaPessoa/convey/archive/master.zip" , tf , mode = 'wb' )
+download.file( "https://github.com/DjalmaPessoa/convey/archive/master.zip" , tf , mode = 'wb' )
 
 for( j in 1:8 ){
 
@@ -16,7 +14,7 @@ for( j in 1:8 ){
 	dir.create( this_tempdir_b )
 	dir.create( this_tempdir_c )
 	
-	cachaca( "https://github.com/DjalmaPessoa/convey/archive/master.zip" , tf , mode = 'wb' )
+	download.file( "https://github.com/DjalmaPessoa/convey/archive/master.zip" , tf , mode = 'wb' )
 	unzip( tf , exdir = this_tempdir_a )
 	
 	dtt <- devtools::test( paste0( this_tempdir_a , '/convey-master' ) )
@@ -28,7 +26,7 @@ for( j in 1:8 ){
 	unlink( this_tempdir_a , recursive = TRUE ) ; Sys.sleep( 10 )
 	
 	dir.create( this_tempdir_b )
-	cachaca( "https://github.com/DjalmaPessoa/convey/archive/master.zip" , tf , mode = 'wb' )
+	download.file( "https://github.com/DjalmaPessoa/convey/archive/master.zip" , tf , mode = 'wb' )
 	unzip( tf , exdir = this_tempdir_b )
 	
 	dtc <- devtools::check( paste0( this_tempdir_b , '/convey-master' ) , vignettes = FALSE )
@@ -40,7 +38,7 @@ for( j in 1:8 ){
 	unlink( this_tempdir_b , recursive = TRUE ) ; Sys.sleep( 10 )
 
 	dir.create( this_tempdir_c )
-	cachaca( "https://github.com/DjalmaPessoa/convey/archive/master.zip" , tf , mode = 'wb' )
+	download.file( "https://github.com/DjalmaPessoa/convey/archive/master.zip" , tf , mode = 'wb' )
 	unzip( tf , exdir = this_tempdir_c )
 	
 	dtcrdt <- devtools::check( paste0( this_tempdir_c , '/convey-master' ) , run_dont_test = TRUE , vignettes = FALSE )
