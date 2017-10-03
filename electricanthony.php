@@ -130,7 +130,7 @@ if (isset($_REQUEST['badge'])) {
 		}
 	}
 	if ($state == "success") {
-		header("Location: https://img.shields.io/badge/$_REQUEST[host]-passing-green.svg");
+		header("Location: https://img.shields.io/badge/$_REQUEST[host]-passing-brightgreen.svg");
 	}
 	if ($state == "failed") {
 		header("Location: https://img.shields.io/badge/$_REQUEST[host]-failing-red.svg");
