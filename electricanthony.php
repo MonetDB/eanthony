@@ -109,6 +109,40 @@ header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 
+if (isset($_REQUEST['badge'])) {
+	//header("Content-type: image/svg+xml");
+
+	$state = 'unknown';
+
+	foreach(array_slice($runs, 0, 20) as $r) {
+
+		$ti = @$r['tests'][$_REQUEST['badge']];
+		if ($r['host'] == $_REQUEST['host']) {
+			//print_r($ti);
+			if ($ti['complete']) {
+				if ($ti['success']) {
+					$state = 'success';
+				} else {
+					$state = 'failed';
+				}
+				break;
+			}
+		}
+	}
+	if ($state == "success") {
+		header("Location: https://img.shields.io/badge/$_REQUEST[host]-passing-green.svg");
+	}
+	if ($state == "failed") {
+		header("Location: https://img.shields.io/badge/$_REQUEST[host]-failing-red.svg");
+	}
+	if ($state == "unknown") {
+		header("Location: https://img.shields.io/badge/$_REQUEST[host]-unknown-lightgray.svg");
+	}
+
+	die();
+}
+
+
 if (isset($_REQUEST['rss'])) {
 	header("Content-type: application/rss+xml");
 		print '<?xml version="1.0" encoding="UTF-8"?>
@@ -223,8 +257,6 @@ th, td {
 
 <img src="sysiphos.png" title="Nekyia: Persephone supervising Sisyphus pushing his rock in the Underworld. Side A of an Attic black-figure amphora, ca. 530 BC. From Vulci." style="position: fixed; left: 10px; top: 10px; height: 80px"/>
 
- <img src="wilbur.png" title="Wilbur approved testing" style="position: fixed; right: 20px; bottom: 1px; height: 200px"/>
-<!--<img src="trump.png" title="Make MonetDBLite great again!" style="position: fixed; right: 20px; top: 10px; height: 200px"/>-->
 
 </body>
 </html>
