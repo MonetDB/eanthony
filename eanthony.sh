@@ -78,6 +78,7 @@ do
 
 	export R_LIBS=$RLIBDIR PATH=$RINSTALLDIR/bin:/cygdrive/c/Rtools/bin:$PATH TMP=$RTMPDIR TEMP=$RTMPDIR
 	# install/update various packages
+	rm -rf $RLIBDIR/archive
 	$RBIN -f $BASEDIR/packages.R > $LOGDIR/packages.log 2>&1
 	# record versions of installed packages
 	$RBIN --slave -e "write.table(installed.packages(lib.loc='$RLIBDIR')[, c('Package','Version')], '$LOGDIR/package-versions', sep='\t', quote=F, row.names=F, col.names=F)"
