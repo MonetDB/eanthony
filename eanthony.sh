@@ -17,7 +17,7 @@ do
 	date
 
 	git -C $BASEDIR pull
-	
+
 	# these files need to exist and denote R version and MonetDB HG branch to use
 	RTAG=`cat $BASEDIR/r-tag`
 	RUNTESTS=$BASEDIR/runtests
@@ -43,6 +43,9 @@ do
 	RTMPDIR=$BASEDIR/r-tmp
 	RWDDIR=$BASEDIR/r-wd
 	LOGDIR=$BASEDIR/logs/$RUNID
+
+	find $RTMPDIR -name "Rtmp*" -type d -exec chmod -R 700 {} + -exec rm -rf {} +
+	rm -rf $RWDDIR/*
 
 	rm $BASEDIR/logs/current
 	ln -s $LOGDIR $BASEDIR/logs/current
