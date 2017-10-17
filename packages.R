@@ -4,7 +4,7 @@ install_or_upgrade_packages <- function(lp, ...) {
 	update.packages(ask=F, oldPkgs=lp, ...)
 }
 
-install_or_upgrade_packages(c("data.table", "RSQLite" , "devtools" , "roxygen2", "srvyr", "convey", "DBI", "digest"), repos='http://cran.rstudio.com/', quiet=F)
+install_or_upgrade_packages(c("data.table", "RSQLite" , "devtools" , "roxygen2", "srvyr", "convey", "DBI", "digest", "testthat", "vardpoor"), repos='http://cran.rstudio.com/', quiet=F)
 
 devtools::install_github("ajdamico/lodown" , dependencies = TRUE)
 
@@ -14,5 +14,5 @@ install_submodule_git <- function(x, ...) {
 shQuote(install_dir)))
   devtools::install(install_dir, ...)
 }
-install_submodule_git("https://github.com/hannesmuehleisen/MonetDBLite-R")
+#install_submodule_git("https://github.com/hannesmuehleisen/MonetDBLite-R")
 
