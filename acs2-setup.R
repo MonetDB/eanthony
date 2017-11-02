@@ -16,4 +16,5 @@ source( lodown::syntaxtractor( "acs2" , replacements = machine_specific_replacem
 print(showConnections(all=TRUE))  
 closeAllConnections()
 gc()
+warnings()
 q(status=0)

@@ -16,4 +16,5 @@ source( lodown::syntaxtractor( "censo_escolar" , replacements = machine_specific
 print(showConnections(all=TRUE))  
 closeAllConnections()
 gc()
+warnings()
 q(status=0)
