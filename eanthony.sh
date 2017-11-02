@@ -109,12 +109,16 @@ do
 		mkdir -p $RWD
 		set -o pipefail
 		timeout -k 40h 30h $RBIN -f $BASEDIR/$RSCRIPT-setup.R 2>&1 | awk '{print strftime("%Y-%m-%d %H:%M:%S"), $0; fflush(); }' > $LOGDIR/$RSCRIPT.log 
-		if [ $? != 0 ]; then
+		SETUPRC=$?
+		echo -e "\nsetup return code=$SETUPRC" >> $LOGDIR/$RSCRIPT.log 
+		if [ $SETUPRC != 0 ]; then
 		 	echo "$RSCRIPT setup fail"
 		 else
 		 	touch $LOGDIR/$RSCRIPT-setup-success
 			timeout -k 40h 30h $RBIN -f $BASEDIR/$RSCRIPT-test.R 2>&1 | awk '{print strftime("%Y-%m-%d %H:%M:%S"), $0; fflush(); }' >> $LOGDIR/$RSCRIPT.log 
-			if [ $? != 0 ]; then
+			TESTRC=$?
+			echo -e "\ntest return code=$TESTRC" >> $LOGDIR/$RSCRIPT.log 
+			if [ $TESTRC != 0 ]; then
 				echo "$RSCRIPT test fail"
 			else
 				touch $LOGDIR/$RSCRIPT-test-success

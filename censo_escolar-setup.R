@@ -12,3 +12,8 @@ machine_specific_replacements <-
 	)
 
 source( lodown::syntaxtractor( "censo_escolar" , replacements = machine_specific_replacements , setup_test = "setup" ) , echo = TRUE )
+
+print(showConnections(all=TRUE))  
+closeAllConnections()
+gc()
+q(status=0)
