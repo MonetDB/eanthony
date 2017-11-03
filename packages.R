@@ -4,7 +4,7 @@ install_or_upgrade_packages <- function(lp, ...) {
 	update.packages(ask=F, oldPkgs=lp, ...)
 }
 
-install_or_upgrade_packages(c("data.table", "RSQLite" , "devtools" , "roxygen2", "srvyr", "convey", "DBI", "digest", "testthat", "vardpoor", "IC2", "dbplyr"), repos='http://cran.rstudio.com/', quiet=F,dependencies=TRUE)
+install_or_upgrade_packages(c("data.table", "RSQLite" , "devtools" , "roxygen2", "srvyr", "convey", "DBI", "digest", "testthat", "vardpoor", "IC2", "dbplyr","RODBC"), repos='http://cran.rstudio.com/', quiet=F,dependencies=TRUE)
 
 devtools::install_github("ajdamico/lodown" , dependencies = TRUE)
 
