@@ -12,12 +12,3 @@ machine_specific_replacements <-
 	)
 
 source( lodown::syntaxtractor( "acs" , replacements = machine_specific_replacements , setup_test = "setup" ) , echo = TRUE )
-<<<<<<< HEAD
-
-print(showConnections(all=TRUE))  
-closeAllConnections()
-gc()
-warnings()
-q(status=0)
-=======
->>>>>>> 53a5b96926853cec69ad4c9a35340d65f9d34d2b
