@@ -11,4 +11,4 @@ machine_specific_replacements <-
 		
 	)
 
-source( lodown::syntaxtractor( "acs2" , replacements = machine_specific_replacements , setup_test = "setup" ) , echo = TRUE )
+source( lodown::syntaxtractor( "acs3" , replacements = machine_specific_replacements , setup_test = "test" ) , echo = TRUE )
