@@ -38,7 +38,7 @@ for( j in 1:8 ){
 warnings()
 # corruption sniffing
 db <- dbConnect( MonetDBLite::MonetDBLite() )
-cs <- dbGetQuery( db , "select tables.name, columns.name, location from tables inner join columns on tables.id=columns.table_id left join storage on tables.name=storage.table and columns.name=storage.column where location is null and tables.name not in ('tables', 'columns', 'users', 'querylog_catalog', 'querylog_calls', 'querylog_history', 'tracelog', 'sessions', 'optimizers', 'environment', 'queue', 'rejects', 'storage', 'storagemodel', 'tablestoragemodel')" )
+cs <- dbGetQuery( db , "select tables.name, columns.name, location from tables inner join columns on tables.id=columns.table_id left join storage on tables.name=storage.table and columns.name=storage.column where location is null and tables.name not in ('tables', 'columns', 'users', 'querylog_catalog', 'querylog_calls', 'querylog_history', 'tracelog', 'sessions', 'optimizers', 'environment', 'queue', 'rejects', 'storage', 'storagemodel', 'tablestoragemodel', 'roles', 'var_values', 'ids') and tables.name not like 'dependenc%'" )
 print(cs)
 stopifnot(nrow(cs) == 0) ; dbDisconnect( db , shutdown = TRUE )
 
