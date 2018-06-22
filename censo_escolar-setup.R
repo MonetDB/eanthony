@@ -1,14 +1,5 @@
 setwd( Sys.getenv( "RWD" ) )
 
-machine_specific_replacements <- 
-	list( 
-		
-		# replace the folder path on macnix
-		c( 'path.expand( \"~\" ) , \"CENSO_ESCOLAR\"' , paste0( '"' , getwd() , '"' ) ) ,
-		
-		# change other things in the script to be run
-		c( "hello" , "howdy" )
-		
-	)
-
-source( lodown::syntaxtractor( "censo_escolar" , replacements = machine_specific_replacements , setup_test = "setup" ) , echo = TRUE )
+a <- lodown::get_catalog("censo_escolar")
+# don't do 2017 it's been broken forever
+lodown::lodown("censo", catalog=a[a$year < 2017,], output_dir= getwd())
